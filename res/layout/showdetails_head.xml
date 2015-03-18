@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/listbg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/showdetails_name"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:background="@color/title_bg"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:textColor="@color/textcolor"
+        android:textSize="15sp" />
+
+    <RelativeLayout
+        android:id="@+id/showdetails_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/showdetails_name"
+        android:layout_marginTop="10dp" >
+
+        <ImageView
+            android:id="@+id/showdetails_photo"
+            android:layout_width="80dp"
+            android:layout_height="110dp"
+            android:layout_marginLeft="10dp"
+            android:scaleType="fitXY" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/showdetails_photo"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/showdetails_time"
+                style="@style/textStyle"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:id="@+id/showdetails_addr"
+                style="@style/textStyle"
+                android:layout_marginTop="5dp" />
+            
+            <TextView
+                android:id="@+id/showdetails_price"
+                style="@style/textStyle"
+                android:layout_marginTop="5dp" />
+
+       
+            <ImageButton
+                android:id="@+id/showcall"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:src="@drawable/tel_button" />
+
+            
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/show_desc"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/showdetails_layout"
+        android:layout_marginTop="10dp"
+        android:background="@color/title_bg" >
+
+        <TextView
+            android:id="@+id/showinfotext"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/show_info"
+            android:textColor="@color/textcolor"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/showfobtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:src="@drawable/sanjiao_n" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/showinfo_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/show_desc"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/textcolor"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/show_comm"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/showinfo_text"
+        android:layout_marginTop="10dp"
+        android:background="@color/title_bg" >
+
+        <TextView
+            android:id="@+id/showcomm_text"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/moviecomment"
+            android:textColor="@color/textcolor"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/showcomm_count"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_toRightOf="@id/showcomm_text"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="(20)"
+            android:textColor="@color/textcolor"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/showcommbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:src="@drawable/sanjiao_n" />
+    </RelativeLayout>
+
+</RelativeLayout>

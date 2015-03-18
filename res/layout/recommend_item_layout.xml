@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:id="@+id/re_layout" android:visibility="gone">
+	<TextView android:id="@+id/recname" android:layout_marginTop="5dp"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:paddingLeft="5dp" android:textSize="16sp" />
+	<TextView android:id="@+id/rectime" android:layout_alignTop="@id/recname"
+		android:layout_toRightOf="@id/recname" 
+		android:layout_alignParentRight="true" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:textSize="16sp" />
+	<TextView android:layout_below="@id/recname"
+		android:layout_marginTop="8dp" android:id="@+id/reccontent"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:paddingLeft="5dp" android:maxLines="3" android:textSize="14sp"
+		android:ellipsize="end" />
+	<ImageView android:layout_below="@id/reccontent"
+		android:layout_width="fill_parent" android:layout_height="1px"
+		android:background="@color/black" />
+</RelativeLayout>

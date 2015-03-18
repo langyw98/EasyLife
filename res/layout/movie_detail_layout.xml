@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical" android:background="@color/listbg">
+
+	<include layout="@layout/head_layout" android:id="@+id/headbar"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_alignParentTop="true" />
+
+	<include layout="@layout/bottom_layout" android:id="@+id/bottomBtn"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true" />
+
+	<ListView android:layout_width="fill_parent" android:layout_height="fill_parent" 
+	    android:layout_below="@id/headbar"  android:layout_above="@id/bottomBtn"
+		android:id="@+id/moviedetail_list" android:divider="@null"></ListView>
+
+</RelativeLayout>

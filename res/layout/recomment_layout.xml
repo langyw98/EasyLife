@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/listbg"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/recomment_button"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/recomment_back"
+            android:layout_width="80dp"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:text="返回" />
+
+        <Button
+            android:id="@+id/recomment_send"
+            android:layout_width="80dp"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:text="发送" />
+
+        <TextView
+            android:id="@+id/contenttext"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_toLeftOf="@id/recomment_send"
+            android:layout_toRightOf="@id/recomment_back"
+            android:gravity="center"
+            android:text="内容"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/num_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/recomment_button"
+        android:background="@drawable/tab_bg"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:text="@string/num" />
+
+        <EditText
+            android:id="@+id/num"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@android:color/transparent"
+            android:digits="1234567890"
+            android:gravity="left|center_vertical"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/recomment_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/num_layout"
+        android:layout_below="@id/recomment_button"
+        android:gravity="left|top" />
+
+</RelativeLayout>
