@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -32,6 +33,12 @@ public class RegActivity extends Activity {
 				Toast.makeText(RegActivity.this, "注册失败", Toast.LENGTH_LONG).show();
 				break;
 			case MSG_REGIST_SUCCESS:
+				Toast.makeText(RegActivity.this, "注册成功", Toast.LENGTH_LONG).show();
+				//记录为登陆状态
+				//注册成功，并登陆，跳转到主界面
+				Intent intent = new Intent(RegActivity.this, cn.bdqn.life.activity.MainActivity.class);
+				startActivity(intent);
+				finish();
 				break;
 			}
 		};
@@ -50,7 +57,7 @@ public class RegActivity extends Activity {
 		et_confirm = (EditText) findViewById(R.id.et_confirm);
 	}
 	
-	public void BtnOnclick(View view){
+	public void BtnOnClick(View view){
 		switch(view.getId()){
 		case R.id.btn_regist:
 			String strAccount = et_account.getText().toString().trim();

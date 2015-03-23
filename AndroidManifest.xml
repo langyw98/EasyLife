@@ -30,8 +30,10 @@
         </activity>
         <activity android:name="cn.bdqn.life.activity.RegActivity"
            android:theme="@android:style/Theme.Holo.NoActionBar" ></activity>
-         <activity android:name="cn.bdqn.life.activity.LoginActivity"
-            android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
+        <activity android:name="cn.bdqn.life.activity.LoginActivity"
+           android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
+        <activity android:name="cn.bdqn.life.activity.MainActivity"
+           android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
         <!-- new activity and service -->
         
         <!-- old activity and service -->
