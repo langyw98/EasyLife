@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import cn.bdqn.life.R;
+import cn.bdqn.life.data.LifePreferences;
 import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;
 import cn.bdqn.life.net.URLProtocol;
@@ -95,8 +96,12 @@ public class LoginActivity extends Activity {
 					JSONObject json = new JSONObject(jsonStr);
 					int code = json.getInt("code");
 					if (code == 0) {
+						//±£´æµÇÂ½ÐÅÏ¢
 						String uid = json.getString("uid");
-						Log.i("LoginActivity","uid is "+ uid);
+						LifePreferences.getPreferences().setUID(uid);
+						LifePreferences.getPreferences().saveName(strAccount);
+						LifePreferences.getPreferences().savePW(strPassword);
+						
 						handler.sendEmptyMessage(MSG_LOGIN_SUCCESS);
 						return;
 					}
