@@ -1,5 +1,6 @@
 package cn.bdqn.life.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -32,6 +33,7 @@ public class MainActivity extends FragmentActivity {
 		Fragment mainFragment = new MainFragment();
 		Fragment userInfoFragment = new UserInfoFragment();
 		
+		mFragments = new ArrayList<Fragment>();
 		mFragments.add(mainFragment);
 		mFragments.add(userInfoFragment);
 		

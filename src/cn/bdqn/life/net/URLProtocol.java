@@ -4,7 +4,7 @@ package cn.bdqn.life.net;
 public class URLProtocol {
 
 	/**·þÎñÆ÷URL*/
-	public static final String ROOT = "http://192.168.9.117:8080/leisurelife/dealcmd";
+	public static final String ROOT = "http://192.168.9.18:8080/leisurelife/dealcmd";
 	
 	/**µÇÂ¼*/
 	public static final int CMD_LOGIN = 0;

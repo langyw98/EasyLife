@@ -35,4 +35,11 @@
         <item name="android:ellipsize">end</item>
         <item name="android:textColor">@color/textcolor</item>
     </style>
+    <!-- 新添加Style -->
+    <!-- 为 Theme 设置透明属性 -->
+    <style name="AppStartTheme" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>
