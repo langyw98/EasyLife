@@ -9,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:id="@+id/tab_1" >
 
         <ImageButton
             android:id="@+id/btn_1"
@@ -20,7 +21,7 @@
             android:id="@+id/tv_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
-            android:text="tv_1"/>
+            android:text="首页"/>
     </LinearLayout>
 
     <Space
@@ -31,7 +32,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:id="@+id/tab_2" >
 
         <ImageButton
             android:id="@+id/btn_2"
@@ -42,9 +44,9 @@
             android:id="@+id/tv_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
-            android:text="tv_2"/>
+            android:text="推荐"/>
     </LinearLayout>
-
+    
     <Space
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -53,8 +55,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:id="@+id/tab_3" >
 
         <ImageButton
             android:id="@+id/btn_3"
@@ -65,7 +67,30 @@
             android:id="@+id/tv_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
-            android:text="tv_3"/>
+            android:text="收藏"/>
+    </LinearLayout>
+    <Space
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:id="@+id/tab_4"  >
+
+        <ImageButton
+            android:id="@+id/btn_4"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/tv_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:text="我的"/>
     </LinearLayout>
 
 </LinearLayout>
