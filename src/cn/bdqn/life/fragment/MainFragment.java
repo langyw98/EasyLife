@@ -38,7 +38,7 @@ public class MainFragment extends Fragment {
 	private void initView() {
 		// TODO Auto-generated method stub
 		hostActivity = getActivity();
-		fFilm = (FrameLayout) hostActivity.findViewById(R.id.entrance_film);
+		fFilm = (FrameLayout) getView().findViewById(R.id.entrance_film);
 		fExhibition = (FrameLayout) hostActivity.findViewById(R.id.entrance_exhibition);
 		fFood = (FrameLayout) hostActivity.findViewById(R.id.entrance_food);
 		fShow = (FrameLayout) hostActivity.findViewById(R.id.entrance_show);

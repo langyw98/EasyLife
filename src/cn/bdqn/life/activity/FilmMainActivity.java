@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import cn.bdqn.life.R;
+import cn.bdqn.life.fragment.FavorFragment;
 import cn.bdqn.life.fragment.FilmListFragment;
-import cn.bdqn.life.fragment.FilmUpcomingFragment;
 
 public class FilmMainActivity extends FragmentActivity {
 	private ViewPager viewPager;
@@ -25,18 +25,21 @@ public class FilmMainActivity extends FragmentActivity {
 		initEvent();
 	}
 	
-	private void initView(){
+	private void initEvent(){
 		
 	}
 	
-	private void initEvent(){
+	private void initView(){
 		viewPager = (ViewPager) findViewById(R.id.view_pager);
-		FilmListFragment recentFragment = new FilmListFragment();
-		FilmUpcomingFragment upcomingFragment = new FilmUpcomingFragment();
+		FilmListFragment recentFragment = new FilmListFragment(FilmListFragment.FRAGMENTTYPE_RECENT);
+		FilmListFragment upcomingFragment = new FilmListFragment(FilmListFragment.FRAGMENTTYPE_UPCOMING);
 		
 		mFragments = new ArrayList<Fragment>();
+		
 		mFragments.add(recentFragment);
 		mFragments.add(upcomingFragment);
+		
+		
 		
 		mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
 			
