@@ -15,11 +15,13 @@
             android:id="@+id/entrance_film"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="7" >
+            android:layout_weight="7" 
+            android:clickable="true">
 
             <ImageButton
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+                android:layout_height="fill_parent" 
+                android:clickable="false"/>
 
             <TextView
                 android:layout_width="wrap_content"

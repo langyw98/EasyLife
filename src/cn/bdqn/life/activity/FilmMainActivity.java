@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import cn.bdqn.life.R;
-import cn.bdqn.life.fragment.FilmRecentFragment;
+import cn.bdqn.life.fragment.FilmListFragment;
 import cn.bdqn.life.fragment.FilmUpcomingFragment;
 
 public class FilmMainActivity extends FragmentActivity {
@@ -31,7 +31,7 @@ public class FilmMainActivity extends FragmentActivity {
 	
 	private void initEvent(){
 		viewPager = (ViewPager) findViewById(R.id.view_pager);
-		FilmRecentFragment recentFragment = new FilmRecentFragment();
+		FilmListFragment recentFragment = new FilmListFragment();
 		FilmUpcomingFragment upcomingFragment = new FilmUpcomingFragment();
 		
 		mFragments = new ArrayList<Fragment>();

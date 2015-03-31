@@ -11,7 +11,6 @@
         android:layout_marginLeft="20dp"
         android:orientation="vertical"
         android:clickable="true"
-        android:focusable="true"
         android:id="@+id/tab_1" >
 
         <ImageButton
@@ -38,7 +37,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" 
         android:clickable="true"
-        android:focusable="true"
         android:id="@+id/tab_2" >
 
         <ImageButton
@@ -66,7 +64,6 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
         android:clickable="true"
-        android:focusable="true"
         android:orientation="vertical"
         android:id="@+id/tab_3"  >
 
