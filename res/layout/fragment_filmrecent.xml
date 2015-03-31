@@ -6,6 +6,6 @@
     <TextView 
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:text="favor fragment"/>
+        android:text="main fragment"/>
 
 </LinearLayout>

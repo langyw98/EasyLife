@@ -1,13 +1,10 @@
 package cn.bdqn.life.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -15,18 +12,22 @@ import cn.bdqn.life.R;
 import cn.bdqn.life.fragment.FavorFragment;
 import cn.bdqn.life.fragment.MainFragment;
 import cn.bdqn.life.fragment.RecommendFragment;
-import cn.bdqn.life.fragment.UserInfoFragment;
 
 public class MainActivity extends FragmentActivity {
 	
-	private ViewPager viewPager;
-	private FragmentPagerAdapter mAdapter;
-	private List<Fragment> mFragments;
+	private static final int TAB_1 = 0;
+	private static final int TAB_2 = 1;
+	private static final int TAB_3 = 2;
+	
+	private FragmentManager fgManager;
 	
 	private LinearLayout lTabMain;
 	private LinearLayout lTabRecommend;
 	private LinearLayout lTabFavor;
-	private LinearLayout lTabUserInfo;
+	
+	private Fragment mainFragment;
+	private Fragment recommendFragment;
+	private Fragment favorFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,54 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 		initView();
 		initEvent();
+		fgManager = getSupportFragmentManager();
+		selectTab(TAB_1);
+	}
+	
+	private void selectTab(int pos){
+		// 开启一个Fragment事务  
+        FragmentTransaction transaction = fgManager.beginTransaction();  
+        // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况  
+        hideFragments(transaction);
+		switch(pos){
+		case TAB_1:
+            if (mainFragment == null)  
+            {  
+                // 如果mainFragment为空，则创建一个并添加到界面上  
+            	mainFragment = new MainFragment();  
+                transaction.add(R.id.content, mainFragment);  
+            } else  
+            {  
+                // 如果mainFragment不为空，则直接将它显示出来  
+                transaction.show(mainFragment);  
+            }  
+			break;
+		case TAB_2:
+			if (recommendFragment == null)  
+            {  
+                // 如果recommendFragment为空，则创建一个并添加到界面上  
+				recommendFragment = new RecommendFragment();  
+                transaction.add(R.id.content, recommendFragment);  
+            } else  
+            {  
+                // 如果recommendFragment不为空，则直接将它显示出来  
+                transaction.show(recommendFragment);  
+            } 
+			break;
+		case TAB_3:
+			if (favorFragment == null)  
+            {  
+                // 如果favorFragment为空，则创建一个并添加到界面上  
+				favorFragment = new FavorFragment();  
+                transaction.add(R.id.content, favorFragment);  
+            } else  
+            {  
+                // 如果favorFragment不为空，则直接将它显示出来  
+                transaction.show(favorFragment);  
+            } 
+			break;
+		}
+		transaction.commit();
 	}
 	
 	private void initEvent(){
@@ -43,7 +92,7 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				selectTab(TAB_1);
 			}
 		});
 		lTabRecommend.setOnClickListener(new OnClickListener() {
@@ -51,7 +100,7 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				selectTab(TAB_2);
 			}
 		});		
 		lTabFavor.setOnClickListener(new OnClickListener() {
@@ -59,17 +108,10 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				selectTab(TAB_3);
 			}
 		});
-		lTabUserInfo.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		
 	}
 	
 	private void initView() {
@@ -77,35 +119,23 @@ public class MainActivity extends FragmentActivity {
 		
 		lTabMain = (LinearLayout) findViewById(R.id.tab_1);
 		lTabRecommend = (LinearLayout) findViewById(R.id.tab_2);
-		lTabFavor = (LinearLayout) findViewById(R.id.tab_3);
-		lTabUserInfo = (LinearLayout) findViewById(R.id.tab_4);
+		lTabFavor = (LinearLayout) findViewById(R.id.tab_3);	
 		
-		viewPager = (ViewPager) findViewById(R.id.view_pager);
-		Fragment mainFragment = new MainFragment();
-		Fragment recommendFragment = new RecommendFragment();
-		Fragment favorFragment = new FavorFragment();
-		Fragment userInfoFragment = new UserInfoFragment();
-		
-		mFragments = new ArrayList<Fragment>();
-		mFragments.add(mainFragment);
-		mFragments.add(recommendFragment);
-		mFragments.add(favorFragment);
-		mFragments.add(userInfoFragment);
-		
-		mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
-			
-			@Override
-			public int getCount() {
-				// TODO Auto-generated method stub
-				return mFragments.size();
-			}
-			
-			@Override
-			public Fragment getItem(int arg0) {
-				// TODO Auto-generated method stub
-				return mFragments.get(arg0);
-			}
-		};
-		viewPager.setAdapter(mAdapter);
 	}
+	
+	 private void hideFragments(FragmentTransaction transaction)  
+	    {  
+	        if (mainFragment != null)  
+	        {  
+	            transaction.hide(mainFragment);  
+	        }  
+	        if (recommendFragment != null)  
+	        {  
+	            transaction.hide(recommendFragment);  
+	        }  
+	        if (favorFragment != null)  
+	        {  
+	            transaction.hide(favorFragment);  
+	        }  
+	    } 
 }

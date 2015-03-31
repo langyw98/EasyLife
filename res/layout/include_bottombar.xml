@@ -10,12 +10,16 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
         android:id="@+id/tab_1" >
 
         <ImageButton
             android:id="@+id/btn_1"
             android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:clickable="false"
+            android:layout_height="30dp" 
+            />
 
         <TextView
             android:id="@+id/tv_1"
@@ -33,11 +37,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical" 
+        android:clickable="true"
+        android:focusable="true"
         android:id="@+id/tab_2" >
 
         <ImageButton
             android:id="@+id/btn_2"
             android:layout_width="30dp"
+            android:clickable="false"
             android:layout_height="30dp" />
 
         <TextView
@@ -52,15 +59,21 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
+
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" 
-        android:id="@+id/tab_3" >
+        android:layout_marginRight="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:id="@+id/tab_3"  >
 
         <ImageButton
             android:id="@+id/btn_3"
             android:layout_width="30dp"
+            android:clickable="false"
             android:layout_height="30dp" />
 
         <TextView
@@ -68,29 +81,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
             android:text="收藏"/>
-    </LinearLayout>
-    <Space
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:orientation="vertical"
-        android:id="@+id/tab_4"  >
-
-        <ImageButton
-            android:id="@+id/btn_4"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
-
-        <TextView
-            android:id="@+id/tv_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:text="我的"/>
     </LinearLayout>
 
 </LinearLayout>
