@@ -2,8 +2,8 @@ package cn.bdqn.life.entity;
 
 import android.graphics.drawable.Drawable;
 
-public class Movie {
-	public int mid;
+public class Film {
+	public int id;
 	public String name;
 	public String type;
 	public String time;
@@ -15,7 +15,7 @@ public class Movie {
 	
 	@Override
 	public String toString() {
-		return "Movie [mid=" + mid + ", name=" + name + ", type=" + type
+		return "Movie [id=" + id + ", name=" + name + ", type=" + type
 				+ ", time=" + time + ", player=" + player + ", image="
 				+ image + ", desc=" + desc + ", timelong=" + timelong
 				+ ", icon=" + icon + "]";
