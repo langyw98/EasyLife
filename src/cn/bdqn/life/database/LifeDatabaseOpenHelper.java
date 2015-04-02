@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class LifeDatabaseOpenHelper extends SQLiteOpenHelper {
-	private static final String NAME = "db_life";
+	private static final String NAME = "db_life.db";
 	private static final int VERSION = 1;
 	public LifeDatabaseOpenHelper(Context context) {
 		super(context, NAME, null, VERSION);

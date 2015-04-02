@@ -44,7 +44,7 @@ public class HomeActivity extends BaseActivity {
 		mHandler = new Handler() {// 返回请求
 			@Override
 			public void handleMessage(Message msg) {
-				if (msg.what == URLProtocol.CMD_MOVIE) {// 看电影
+				if (msg.what == URLProtocol.CMD_FILM) {// 看电影
 					ScreenUtil.hideLoading();
 					Bundle bundle = msg.getData();
 					int code = bundle.getInt("HTTP_CODE");
@@ -116,7 +116,7 @@ public class HomeActivity extends BaseActivity {
 			case 0: {
 				ScreenUtil.showProgressDialog(HomeActivity.this);// 显示进度条
 				Message msg = new Message();
-				msg.what = URLProtocol.CMD_MOVIE;
+				msg.what = URLProtocol.CMD_FILM;
 				ParseJasonDataService.handler.sendMessage(msg);
 			}
 				break;

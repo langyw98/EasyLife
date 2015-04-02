@@ -90,11 +90,11 @@ public class ParseJasonDataService extends Service {
 				}
 					break;
 				// 看电影
-				case URLProtocol.CMD_MOVIE: {
+				case URLProtocol.CMD_FILM: {
 					URLParam param = new URLParam(null);
-					Bundle bundle = doCmd(URLProtocol.CMD_MOVIE, param, null, 0);
+					Bundle bundle = doCmd(URLProtocol.CMD_FILM, param, null, 0);
 					Message m = new Message();
-					m.what = URLProtocol.CMD_MOVIE;
+					m.what = URLProtocol.CMD_FILM;
 					m.setData(bundle);
 					HomeActivity.mHandler.sendMessage(m);
 				}
@@ -133,32 +133,32 @@ public class ParseJasonDataService extends Service {
 				}
 					break;
 				// 正在上映电影详情
-				case URLProtocol.CMD_MOVIEDETAIL: {
+				case URLProtocol.CMD_FILMDETAIL: {
 					Bundle bundle = msg.getData();
 					int position = bundle.getInt("position");
 					int mid = bundle.getInt("mid");
 					URLParam param = new URLParam(null);
 					param.addParam("mid", mid);
-					Bundle result = doCmd(URLProtocol.CMD_MOVIEDETAIL, param,
+					Bundle result = doCmd(URLProtocol.CMD_FILMDETAIL, param,
 							null, position);
 					Message m = new Message();
-					m.what = URLProtocol.CMD_MOVIEDETAIL;
+					m.what = URLProtocol.CMD_FILMDETAIL;
 					m.setData(result);
 					WatchMovieActivity.mHandler.sendMessage(m);
 				}
 					break;
 				// 即将上映电影详情
-				case URLProtocol.CMD_MOVIE_WILL_DETAIL: {
+				case URLProtocol.CMD_FILM_WILL_DETAIL: {
 					URLParam param = new URLParam(null);
 					Bundle bundle = msg.getData();
 					int mid = bundle.getInt("mid");
 					int position = bundle.getInt("position");
 					param.addParam("mid", mid);
-					Bundle result = doCmd(URLProtocol.CMD_MOVIE_WILL_DETAIL,
+					Bundle result = doCmd(URLProtocol.CMD_FILM_WILL_DETAIL,
 							param, null, position);
 					Message m = new Message();
 					m.setData(result);
-					m.what = URLProtocol.CMD_MOVIE_WILL_DETAIL;
+					m.what = URLProtocol.CMD_FILM_WILL_DETAIL;
 					WillMovieActivity.mHandler.sendMessage(m);
 				}
 					break;
@@ -261,10 +261,10 @@ public class ParseJasonDataService extends Service {
 					String name = bundle.getString("name");
 					String content = bundle.getString("content");
 					URLParam param = new URLParam(null);
-					if(type == URLProtocol.CMD_MOVIEDETAIL){
+					if(type == URLProtocol.CMD_FILMDETAIL){
 						param.addParam("type", 1);
 						param.addParam("tid", DataManager.movies[position].mid);
-					}else if(type == URLProtocol.CMD_MOVIE_WILL_DETAIL){
+					}else if(type == URLProtocol.CMD_FILM_WILL_DETAIL){
 						param.addParam("type", 8);
 						param.addParam("tid", DataManager.willmovies[position].mid);
 					}else if(type == URLProtocol.CMD_DISPLAY_DETAIL){
@@ -363,7 +363,7 @@ public class ParseJasonDataService extends Service {
 					}
 				}
 					break;
-				case URLProtocol.CMD_MOVIE:// 看电影
+				case URLProtocol.CMD_FILM:// 看电影
 				{
 					JSONArray jrray = json.getJSONArray("list");
 					int len = jrray.length();
@@ -397,10 +397,10 @@ public class ParseJasonDataService extends Service {
 						DataManager.movies[i].icon = img;
 					}
 					URLParam pam = new URLParam(p);
-					doCmd(URLProtocol.CMD_MOVIE_WILL, pam, null, 0);
+					doCmd(URLProtocol.CMD_FILM_WILL, pam, null, 0);
 				}
 					break;
-				case URLProtocol.CMD_MOVIE_WILL:// 即将上映电影
+				case URLProtocol.CMD_FILM_WILL:// 即将上映电影
 				{
 					JSONArray jrray = json.getJSONArray("list");
 					int len = jrray.length();
@@ -436,7 +436,7 @@ public class ParseJasonDataService extends Service {
 					}
 				}
 					break;
-				case URLProtocol.CMD_MOVIEDETAIL:// 电影详情
+				case URLProtocol.CMD_FILMDETAIL:// 电影详情
 				{
 					int mid = json.getInt("mid");
 					result.putInt("position", position);
@@ -448,7 +448,7 @@ public class ParseJasonDataService extends Service {
 					doCmd(URLProtocol.CMD_GET_REC, pam, null, 0);// 获取评论
 				}
 					break;
-				case URLProtocol.CMD_MOVIE_WILL_DETAIL:// 即将上映电影详情
+				case URLProtocol.CMD_FILM_WILL_DETAIL:// 即将上映电影详情
 				{
 					DataManager.willmovies[position].desc = json
 							.getString("desc");

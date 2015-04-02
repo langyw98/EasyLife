@@ -35,7 +35,7 @@ public class MovieDetialAdapter extends BaseAdapter implements OnClickListener{
 		this.mContext = context;
 		this.which = which;
 		this.type = type;
-		if(URLProtocol.CMD_MOVIE_WILL_DETAIL == type){
+		if(URLProtocol.CMD_FILM_WILL_DETAIL == type){
 			willMovie = DataManager.willmovies[which];
 		}else {
 			movie = DataManager.movies[which];
@@ -45,7 +45,7 @@ public class MovieDetialAdapter extends BaseAdapter implements OnClickListener{
 	public MovieDetialAdapter(Context context, Object obj, int type) {
 		this.mContext = context;
 		this.type = type;
-		if(URLProtocol.CMD_MOVIE_WILL_DETAIL == type){
+		if(URLProtocol.CMD_FILM_WILL_DETAIL == type){
 			willMovie = (WillMovie) obj;
 		}else {
 			movie = (Movie) obj;
@@ -103,7 +103,7 @@ public class MovieDetialAdapter extends BaseAdapter implements OnClickListener{
 				moviecommentbtn.setImageResource(R.drawable.sanjiao_n);
 			}
 			moviecommentbtn.setOnClickListener(this);
-			if(URLProtocol.CMD_MOVIEDETAIL == type){
+			if(URLProtocol.CMD_FILMDETAIL == type){
 				movieName.setText(movie.name);
 				moviePhoto.setImageDrawable(movie.icon);
 				labelText.setText(movie.type);
@@ -111,7 +111,7 @@ public class MovieDetialAdapter extends BaseAdapter implements OnClickListener{
 				timeText.setText(movie.time);
 				timeLongText.setText(movie.timelong);
 				movieInfo.setText(movie.desc);
-			}else if(URLProtocol.CMD_MOVIE_WILL_DETAIL == type) {
+			}else if(URLProtocol.CMD_FILM_WILL_DETAIL == type) {
 				movieName.setText(willMovie.name);
 				moviePhoto.setImageDrawable(willMovie.icon);
 				labelText.setText(willMovie.type);

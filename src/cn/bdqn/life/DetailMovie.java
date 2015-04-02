@@ -65,15 +65,15 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 		if(CollectionActivity.COLLECTION == doWhat){
 			int position = bundle.getInt("position");
 			int type = bundle.getInt("type");
-			if(URLProtocol.CMD_MOVIEDETAIL == type){
+			if(URLProtocol.CMD_FILMDETAIL == type){
 				DataManager.Movie movie = (Movie)CollectionActivity.objList.get(position);
 				adapter = new MovieDetialAdapter(DetailMovie.this, movie,
-						URLProtocol.CMD_MOVIEDETAIL);
+						URLProtocol.CMD_FILMDETAIL);
 				detailList.setAdapter(adapter);
 			}else{
 				DataManager.WillMovie movie = (WillMovie)CollectionActivity.objList.get(position);
 				adapter = new MovieDetialAdapter(DetailMovie.this, movie,
-						URLProtocol.CMD_MOVIE_WILL_DETAIL);
+						URLProtocol.CMD_FILM_WILL_DETAIL);
 				detailList.setAdapter(adapter);
 			}
 		}else if (0 == from) {
@@ -83,7 +83,7 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 				nextButton.setClickable(false);
 			}
 			adapter = new MovieDetialAdapter(DetailMovie.this, position,
-					URLProtocol.CMD_MOVIE_WILL_DETAIL);
+					URLProtocol.CMD_FILM_WILL_DETAIL);
 			detailList.setAdapter(adapter);
 		} else {
 			if (position == 0) {
@@ -92,7 +92,7 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 				nextButton.setClickable(false);
 			}
 			adapter = new MovieDetialAdapter(DetailMovie.this, position,
-					URLProtocol.CMD_MOVIEDETAIL);
+					URLProtocol.CMD_FILMDETAIL);
 			detailList.setAdapter(adapter);
 		}
 		handler = new Handler() {
@@ -107,10 +107,10 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 					Bundle bundle = msg.getData();
 					int position = bundle.getInt("position");
 					int type = bundle.getInt("type");
-					if(URLProtocol.CMD_MOVIEDETAIL == type){
+					if(URLProtocol.CMD_FILMDETAIL == type){
 						DataManager.Movie movie = (Movie)CollectionActivity.objList.get(position);
 						adapter = new MovieDetialAdapter(DetailMovie.this, movie,
-								URLProtocol.CMD_MOVIE_WILL_DETAIL);
+								URLProtocol.CMD_FILM_WILL_DETAIL);
 						detailList.setAdapter(adapter);
 					}
 					
@@ -127,9 +127,9 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 			long id) {
 		Message msg = new Message();
 		if (0 == from) {
-			msg.what = URLProtocol.CMD_MOVIEDETAIL;
+			msg.what = URLProtocol.CMD_FILMDETAIL;
 		} else {
-			msg.what = URLProtocol.CMD_MOVIE_WILL_DETAIL;
+			msg.what = URLProtocol.CMD_FILM_WILL_DETAIL;
 		}
 		Bundle bundle = msg.getData();
 		bundle.putInt("mid", mid);
@@ -143,7 +143,7 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 			ScreenUtil.showProgressDialog(this);
 			if (1 == from) {
 				Message msg = new Message();
-				msg.what = URLProtocol.CMD_MOVIEDETAIL;
+				msg.what = URLProtocol.CMD_FILMDETAIL;
 				Bundle bundle = new Bundle();
 				bundle.putInt("position", position - 1);
 				bundle.putInt("mid", DataManager.movies[position - 1].mid);
@@ -151,7 +151,7 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 				ParseJasonDataService.handler.sendMessage(msg);
 			} else {
 				Message msg = new Message();
-				msg.what = URLProtocol.CMD_MOVIE_WILL_DETAIL;
+				msg.what = URLProtocol.CMD_FILM_WILL_DETAIL;
 				Bundle bundle = new Bundle();
 				bundle.putInt("position", position - 1);
 				bundle.putInt("mid", DataManager.willmovies[position - 1].mid);
@@ -164,7 +164,7 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 			ScreenUtil.showProgressDialog(this);
 			if (1 == from) {
 				Message msg = new Message();
-				msg.what = URLProtocol.CMD_MOVIEDETAIL;
+				msg.what = URLProtocol.CMD_FILMDETAIL;
 				Bundle bundle = new Bundle();
 				bundle.putInt("position", position + 1);
 				bundle.putInt("mid", DataManager.movies[position + 1].mid);
@@ -172,7 +172,7 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 				ParseJasonDataService.handler.sendMessage(msg);
 			} else {
 				Message msg = new Message();
-				msg.what = URLProtocol.CMD_MOVIE_WILL_DETAIL;
+				msg.what = URLProtocol.CMD_FILM_WILL_DETAIL;
 				Bundle bundle = new Bundle();
 				bundle.putInt("position", position + 1);
 				bundle.putInt("mid", DataManager.willmovies[position + 1].mid);
@@ -185,10 +185,10 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 			Intent intent = new Intent(DetailMovie.this, CommentActivity.class);
 			intent.putExtra("position", position);
 			if (0 == from) {
-				intent.putExtra("type", URLProtocol.CMD_MOVIE_WILL);
+				intent.putExtra("type", URLProtocol.CMD_FILM_WILL);
 				intent.putExtra("mid", DataManager.willmovies[position].mid);
 			} else {
-				intent.putExtra("type", URLProtocol.CMD_MOVIEDETAIL);
+				intent.putExtra("type", URLProtocol.CMD_FILMDETAIL);
 				intent.putExtra("mid", DataManager.movies[position].mid);
 			}
 			startActivity(intent);
@@ -200,11 +200,11 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 			int type = 0;
 			if(0 == from){
 				// 即将上映的电影详情类型
-				type = URLProtocol.CMD_MOVIE_WILL_DETAIL;
+				type = URLProtocol.CMD_FILM_WILL_DETAIL;
 				 // DataManager中存储即将上映电影详情对象的字符串
 				content = DataManager.willmovies[position].toString();
 			}else{
-				type = URLProtocol.CMD_MOVIEDETAIL;
+				type = URLProtocol.CMD_FILMDETAIL;
 				content = DataManager.movies[position].toString();
 			}
 			StringBuilder builder = new StringBuilder();

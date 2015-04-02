@@ -91,6 +91,7 @@ public class RegActivity extends Activity {
 				//与服务器连接失败
 				if(jsonStr == null){
 					handler.sendEmptyMessage(MSG_CONNECT_FAILED);
+					return;
 				}
 				try {
 					JSONObject json = new JSONObject(jsonStr);

@@ -11,7 +11,7 @@ public class Film {
 	public String image;
 	public String desc;
 	public String timelong;
-	public Drawable icon;
+	public Drawable icon = null;
 	
 	@Override
 	public String toString() {

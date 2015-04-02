@@ -21,7 +21,7 @@ public class FilmImpl implements IFilmDao {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("name", film.name);
-		values.put("desc", film.desc);
+		values.put("descr", film.desc);
 		values.put("image", film.image);
 		values.put("player", film.player);
 		values.put("time", film.time);
@@ -32,6 +32,25 @@ public class FilmImpl implements IFilmDao {
 		db.close();
 	}
 
+	public void addFimls(List<Film> films){
+		LifeDatabaseOpenHelper helper = new LifeDatabaseOpenHelper(MyApplication.getInstance());
+		SQLiteDatabase db = helper.getWritableDatabase();
+		for(int i = 0; i < films.size(); i++){
+			Film film = films.get(i);
+			ContentValues values = new ContentValues();
+			values.put("name", film.name);
+			values.put("descr", film.desc);
+			values.put("image", film.image);
+			values.put("player", film.player);
+			values.put("time", film.time);
+			values.put("timelong", film.timelong);
+			values.put("type", film.type);
+			values.put("id",film.id);
+			db.insert("film", null, values);
+		}
+		db.close();
+	}
+	
 	@Override
 	public void addFilmComment(Comment comment) {
 		// TODO Auto-generated method stub
@@ -66,7 +85,7 @@ public class FilmImpl implements IFilmDao {
 			film.time = cursor.getString(cursor.getColumnIndex("time"));
 			film.player = cursor.getString(cursor.getColumnIndex("player"));
 			film.image = cursor.getString(cursor.getColumnIndex("image"));
-			film.desc = cursor.getString(cursor.getColumnIndex("desc"));
+			film.desc = cursor.getString(cursor.getColumnIndex("descr"));
 			film.timelong = cursor.getString(cursor.getColumnIndex("timelong"));
 			cursor.close();
 		}
@@ -84,7 +103,7 @@ public class FilmImpl implements IFilmDao {
 		String limit = posStart + "," + pageLength;
 		Cursor cursor = db.query("film", columns, null, null, null, null, orderBy ,limit);
 		List<Film> films = new ArrayList<Film>();
-		if (cursor != null && cursor.moveToNext()) {
+		if (cursor != null) {
 			while (cursor.moveToNext()) {
 				Film film = new Film();
 				film.id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -93,7 +112,7 @@ public class FilmImpl implements IFilmDao {
 				film.time = cursor.getString(cursor.getColumnIndex("time"));
 				film.player = cursor.getString(cursor.getColumnIndex("player"));
 				film.image = cursor.getString(cursor.getColumnIndex("image"));
-				film.desc = cursor.getString(cursor.getColumnIndex("desc"));
+				film.desc = cursor.getString(cursor.getColumnIndex("descr"));
 				film.timelong = cursor.getString(cursor.getColumnIndex("timelong"));
 				films.add(film);
 			}
@@ -113,7 +132,7 @@ public class FilmImpl implements IFilmDao {
 		String limit = posStart + "," + pageLength;
 		Cursor cursor = db.query("comment", columns, null, null, null, null, orderBy ,limit);
 		List<Comment> comments = new ArrayList<Comment>();
-		if (cursor != null && cursor.moveToNext()) {
+		if (cursor != null) {
 			while (cursor.moveToNext()) {
 				Comment comment = new Comment();
 				comment.id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -128,6 +147,21 @@ public class FilmImpl implements IFilmDao {
 		}
 		db.close();
 		return comments;
+	}
+
+	@Override
+	public int getMaxFilmId() {
+		// TODO Auto-generated method stub
+		LifeDatabaseOpenHelper helper = new LifeDatabaseOpenHelper(MyApplication.getInstance());
+		SQLiteDatabase db = helper.getWritableDatabase();
+		Cursor cursor = db.rawQuery("SELECT MAX(id) FROM film", null);
+		int result = -1;
+		if(cursor != null && cursor.moveToNext()){
+			result = cursor.getInt(0);
+			cursor.close();
+		}
+		db.close();
+		return result;
 	}
 
 }

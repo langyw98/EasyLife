@@ -4,7 +4,7 @@ package cn.bdqn.life.net;
 public class URLProtocol {
 
 	/**服务器URL*/
-	public static final String ROOT = "http://192.168.9.18:8080/leisurelife/dealcmd";
+	public static final String ROOT = "http://192.168.9.168:8080/leisurelife/dealcmd";
 	
 	/**登录*/
 	public static final int CMD_LOGIN = 0;
@@ -22,10 +22,10 @@ public class URLProtocol {
 	public static final int CMD_GET_IMAGE = 4;
 	
 	/**获取电影列表*/
-	public static final int CMD_MOVIE = 101;
+	public static final int CMD_FILM = 101;
 	
 	/**获取电影详情*/
-	public static final int CMD_MOVIEDETAIL = 102;
+	public static final int CMD_FILMDETAIL = 102;
 	
 	/**获取演唱会列表*/
 	public static final int CMD_CONCERT = 201;
@@ -64,8 +64,8 @@ public class URLProtocol {
 	public static final int CMD_PLAY_DETAIL = 702;
 	
 	/**获取即将上映电影列表*/
-	public static final int CMD_MOVIE_WILL = 801;
+	public static final int CMD_FILM_WILL = 801;
 	
 	/**获取即将上映电影详情*/
-	public static final int CMD_MOVIE_WILL_DETAIL = 802;
+	public static final int CMD_FILM_WILL_DETAIL = 802;
 }

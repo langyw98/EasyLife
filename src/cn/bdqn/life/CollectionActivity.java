@@ -65,7 +65,7 @@ public class CollectionActivity extends BaseActivity implements
 			TextView name = (TextView) convertView
 					.findViewById(R.id.collection_name);
 			type = (Integer)list.get(position).get("type");
-			if (URLProtocol.CMD_MOVIEDETAIL == type) {
+			if (URLProtocol.CMD_FILMDETAIL == type) {
 				String content = (String) list.get(position).get("content");
 				String[] s = content.split(",");
 				for (String str : s) {
@@ -97,7 +97,7 @@ public class CollectionActivity extends BaseActivity implements
 				}
 				objList.add(movie);
 				name.setText("µÁ”∞:" + movie.name);
-			} else if ((URLProtocol.CMD_MOVIE_WILL_DETAIL == type)) {
+			} else if ((URLProtocol.CMD_FILM_WILL_DETAIL == type)) {
 				String content = (String) list.get(position).get("content");
 				String[] s = content.split(",");
 				for (String str : s) {
@@ -273,8 +273,8 @@ public class CollectionActivity extends BaseActivity implements
 		bundle.putInt("type", type);
 		bundle.putInt("do", COLLECTION);
 		readComm(position);
-		if (type == URLProtocol.CMD_MOVIE_WILL_DETAIL
-				|| type == URLProtocol.CMD_MOVIEDETAIL) {
+		if (type == URLProtocol.CMD_FILM_WILL_DETAIL
+				|| type == URLProtocol.CMD_FILMDETAIL) {
 			intent = new Intent(this, DetailMovie.class);
 		} else if (type == URLProtocol.CMD_DISPLAY_DETAIL) {
 			intent = new Intent(this, DisplayDetail.class);

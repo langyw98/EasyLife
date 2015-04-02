@@ -36,7 +36,7 @@ public class WatchMovieActivity extends Activity {
 		mHandler = new Handler(){//返回请求
 			@Override
 			public void handleMessage(Message msg) {
-				if(msg.what == URLProtocol.CMD_MOVIE_WILL_DETAIL){//看电影
+				if(msg.what == URLProtocol.CMD_FILM_WILL_DETAIL){//看电影
 					ScreenUtil.hideLoading();
 					Bundle bundle = msg.getData();
 					mid = bundle.getInt("mid");
@@ -51,7 +51,7 @@ public class WatchMovieActivity extends Activity {
 					}else{
 						ScreenUtil.showMsg(WatchMovieActivity.this, getString(R.string.data_error));
 					}
-				}else if(msg.what == URLProtocol.CMD_MOVIEDETAIL){
+				}else if(msg.what == URLProtocol.CMD_FILMDETAIL){
 					ScreenUtil.hideLoading();
 					Bundle bundle = msg.getData();
 					int position = bundle.getInt("position");
@@ -80,7 +80,7 @@ public class WatchMovieActivity extends Activity {
 			bundle.putInt("mid", mid);
 			bundle.putInt("position", position);
 			msg.setData(bundle);
-			msg.what = URLProtocol.CMD_MOVIEDETAIL;
+			msg.what = URLProtocol.CMD_FILMDETAIL;
 			ParseJasonDataService.handler.sendMessage(msg);
 		}
 	};

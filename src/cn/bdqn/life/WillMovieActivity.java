@@ -35,7 +35,7 @@ public class WillMovieActivity extends Activity {
 		mHandler = new Handler(){//返回请求
 			@Override
 			public void handleMessage(Message msg) {
-				if(msg.what == URLProtocol.CMD_MOVIE_WILL_DETAIL){//看电影
+				if(msg.what == URLProtocol.CMD_FILM_WILL_DETAIL){//看电影
 					ScreenUtil.hideLoading();
 					Bundle bundle = msg.getData();
 					int code = bundle.getInt("HTTP_CODE");
@@ -64,7 +64,7 @@ public class WillMovieActivity extends Activity {
 			bundle.putInt("mid", mid);
 			bundle.putInt("position", position);
 			Message msg = new Message();
-			msg.what = URLProtocol.CMD_MOVIE_WILL_DETAIL;
+			msg.what = URLProtocol.CMD_FILM_WILL_DETAIL;
 			msg.setData(bundle);
 			ParseJasonDataService.handler.sendMessage(msg);
 		}
