@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,15 +16,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.bdqn.life.R;
+import cn.bdqn.life.activity.FilmDetailActivity;
 import cn.bdqn.life.dao.IFilmDao;
 import cn.bdqn.life.dao.impl.FilmImpl;
-import cn.bdqn.life.data.DataManager;
 import cn.bdqn.life.entity.Film;
 import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;
@@ -44,7 +47,7 @@ public class FilmListFragment extends Fragment {
 	private static final int MSG_GET_WILLFILMLIST_NOUPDATE = 6;
 	 
 	
-	private static final int PAGE_LENGTH = 9;
+	private static final int PAGE_LENGTH = 15;
 	
 	private int fragmentType;
 	
@@ -65,7 +68,7 @@ public class FilmListFragment extends Fragment {
 		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
-			return null;
+			return filmList.get(position);
 		}
 
 		@Override
@@ -171,8 +174,23 @@ public class FilmListFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		initData();
 		initView();
+		initEvent();
 	}
 	
+	private void initEvent(){
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(hostActivity, FilmDetailActivity.class);
+				Film film = filmList.get(position);
+				intent.putExtra("id", film.id);
+				hostActivity.startActivity(intent);
+			}
+		});
+	}
 	
 	private void initView() {
 		// TODO Auto-generated method stub

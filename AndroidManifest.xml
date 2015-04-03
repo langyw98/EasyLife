@@ -39,6 +39,8 @@
         </activity>
         <activity android:name="cn.bdqn.life.activity.FilmMainActivity"
            android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
+        <activity android:name="cn.bdqn.life.activity.FilmDetailActivity"
+           android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
         <!-- new activity and service -->
         
         <!-- old activity and service -->
