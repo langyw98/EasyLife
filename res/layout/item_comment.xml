@@ -6,7 +6,7 @@
     android:visibility="gone" >
 
     <TextView
-        android:id="@+id/recname"
+        android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -14,19 +14,19 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/rectime"
+        android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/recname"
-        android:layout_toRightOf="@id/recname"
+        android:layout_alignTop="@id/tv_name"
+        android:layout_toRightOf="@id/tv_name"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/reccontent"
+        android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/recname"
+        android:layout_below="@id/tv_name"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="3"
@@ -36,7 +36,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="1px"
-        android:layout_below="@id/reccontent"
+        android:layout_below="@id/tv_content"
         android:background="@color/black" />
 
 </RelativeLayout>

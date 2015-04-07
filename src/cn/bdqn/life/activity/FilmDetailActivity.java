@@ -1,5 +1,8 @@
 package cn.bdqn.life.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 import cn.bdqn.life.R;
 import cn.bdqn.life.dao.IFilmDao;
 import cn.bdqn.life.dao.impl.FilmImpl;
+import cn.bdqn.life.entity.Comment;
 import cn.bdqn.life.entity.Film;
 import cn.bdqn.life.fragment.FilmListFragment;
 
@@ -23,13 +27,17 @@ public class FilmDetailActivity extends Activity {
 	private Film film;
 	private ListView listView;
 	private ListViewAdapter adapter;
+	private List<Comment> comments = new ArrayList<Comment>();
 	
 	private class ListViewAdapter extends BaseAdapter{
 
+		private View item_profile = null;
+		private View item_introduction = null;
+		
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return 1;
+			return 2 + comments.size();
 		}
 
 		@Override
@@ -47,30 +55,58 @@ public class FilmDetailActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
-			ViewHolder viewHolder;
-			if(convertView == null){
-				viewHolder = new ViewHolder();
-				convertView = View.inflate(FilmDetailActivity.this, R.layout.item_filmlist, null);
-				viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
-				viewHolder.tvLabel = (TextView) convertView.findViewById(R.id.tv_label);
-				viewHolder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
-				viewHolder.ivPhoto = (ImageView) convertView.findViewById(R.id.iv_photo);
-				viewHolder.ivTag = (ImageView) convertView.findViewById(R.id.iv_tag);
-				convertView.setTag(viewHolder);
+			if(position == 0){
+				if(item_profile == null){
+					item_profile = View.inflate(FilmDetailActivity.this, R.layout.item_filmdetaillist_profile, null);
+					ImageView photo = (ImageView) item_profile.findViewById(R.id.iv_photo);
+					TextView name = (TextView) item_profile.findViewById(R.id.tv_name);
+					TextView type = (TextView) item_profile.findViewById(R.id.tv_type);
+					TextView player = (TextView) item_profile.findViewById(R.id.tv_player);
+					TextView time = (TextView) item_profile.findViewById(R.id.tv_time);
+					TextView timelong = (TextView) item_profile.findViewById(R.id.tv_timelong);
+					
+					name.setText(film.name);
+					type.setText(film.type);
+					player.setText(film.player);
+					time.setText(film.time);
+					timelong.setText(film.timelong);
+					
+				}
+				return item_profile;
+			}else if(position == 1){
+				if(item_introduction == null){
+					item_introduction = View.inflate(FilmDetailActivity.this, R.layout.item_filmdetaillist_introduction, null);
+					TextView introduction = (TextView) item_introduction.findViewById(R.id.tv_introduction);
+					ImageView symbol = (ImageView) item_introduction.findViewById(R.id.iv_symbol);
+					
+					introduction.setText(film.desc);
+				}
+				return item_introduction;
 			}else{
-				viewHolder = (ViewHolder) convertView.getTag();
+				ViewHolder viewHolder = null;
+				if(convertView == null || convertView == item_profile || convertView == item_introduction){
+					convertView = View.inflate(FilmDetailActivity.this, R.layout.item_comment, null);
+					viewHolder = new ViewHolder();
+					viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+					viewHolder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
+					viewHolder.tvContent = (TextView) convertView.findViewById(R.id.tv_content);
+					
+					convertView.setTag(viewHolder);
+				}else{
+					viewHolder = (ViewHolder) convertView.getTag();
+				}
+				
+				Comment comment = comments.get(position - 2);
+				viewHolder.tvName.setText(comment.userName);
+				viewHolder.tvTime.setText(comment.time);
+				viewHolder.tvContent.setText(comment.content);
 			}
-			viewHolder.tvName.setText(film.name);
-			viewHolder.tvLabel.setText(film.type);
-			viewHolder.tvTime.setText(film.time);			
 			return convertView;
 		}
 		private class ViewHolder{
 			public TextView tvName;
-			public TextView tvLabel;
+			public TextView tvContent;
 			public TextView tvTime;
-			public ImageView ivPhoto;
-			public ImageView ivTag;
 		}
 	};
 	
