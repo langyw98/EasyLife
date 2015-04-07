@@ -8,11 +8,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import cn.bdqn.life.R;
 import cn.bdqn.life.dao.IFilmDao;
 import cn.bdqn.life.dao.impl.FilmImpl;
 import cn.bdqn.life.entity.Film;
+import cn.bdqn.life.fragment.FilmListFragment;
 
 public class FilmDetailActivity extends Activity {
 
@@ -25,7 +29,7 @@ public class FilmDetailActivity extends Activity {
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return 0;
+			return 1;
 		}
 
 		@Override
@@ -43,9 +47,31 @@ public class FilmDetailActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
-			return null;
+			ViewHolder viewHolder;
+			if(convertView == null){
+				viewHolder = new ViewHolder();
+				convertView = View.inflate(FilmDetailActivity.this, R.layout.item_filmlist, null);
+				viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+				viewHolder.tvLabel = (TextView) convertView.findViewById(R.id.tv_label);
+				viewHolder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
+				viewHolder.ivPhoto = (ImageView) convertView.findViewById(R.id.iv_photo);
+				viewHolder.ivTag = (ImageView) convertView.findViewById(R.id.iv_tag);
+				convertView.setTag(viewHolder);
+			}else{
+				viewHolder = (ViewHolder) convertView.getTag();
+			}
+			viewHolder.tvName.setText(film.name);
+			viewHolder.tvLabel.setText(film.type);
+			viewHolder.tvTime.setText(film.time);			
+			return convertView;
 		}
-		
+		private class ViewHolder{
+			public TextView tvName;
+			public TextView tvLabel;
+			public TextView tvTime;
+			public ImageView ivPhoto;
+			public ImageView ivTag;
+		}
 	};
 	
 	@Override
@@ -56,8 +82,18 @@ public class FilmDetailActivity extends Activity {
 		
 		Intent intent = getIntent();
 		int id = intent.getIntExtra("id", -1);
+		int type = intent.getIntExtra("fragmentType", -1);
+		if(id == -1 || type == -1){
+			finish();
+			Toast.makeText(this, "数据获取失败", Toast.LENGTH_LONG).show();
+			return;
+		}
 		IFilmDao filmdao = new FilmImpl();
-		film = filmdao.getFilm(id);
+		if(type == FilmListFragment.FRAGMENTTYPE_RECENT){
+			film = filmdao.getFilm(id);
+		}else{
+			film = filmdao.getUpcomingFilm(id);
+		}
 		initView();
 	}
 	

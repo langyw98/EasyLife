@@ -16,6 +16,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -33,7 +35,7 @@ import cn.bdqn.life.net.URLParam;
 import cn.bdqn.life.net.URLProtocol;
 import cn.bdqn.life.utils.FileUtil;
 
-public class FilmListFragment extends Fragment {
+public class FilmListFragment extends Fragment implements OnScrollListener{
 	
 	public static final int FRAGMENTTYPE_RECENT = 0;
 	public static final int FRAGMENTTYPE_UPCOMING = 1;
@@ -42,12 +44,8 @@ public class FilmListFragment extends Fragment {
 	private static final int MSG_GET_FILMLIST_FAILED = 1;
 	private static final int MSG_GET_FILMLIST_SUCCESS = 2;
 	private static final int MSG_GET_FILMLIST_NOUPDATE = 3;
-	private static final int MSG_GET_WILLFILMLIST_FAILED = 4;
-	private static final int MSG_GET_WILLFILMLIST_SUCCESS = 5;
-	private static final int MSG_GET_WILLFILMLIST_NOUPDATE = 6;
-	 
 	
-	private static final int PAGE_LENGTH = 15;
+	private static final int PAGE_LENGTH = 10;
 	
 	private int fragmentType;
 	
@@ -56,6 +54,7 @@ public class FilmListFragment extends Fragment {
 	private List<Film> filmList;
 	private FilmListAdapter adapter;
 	
+	private boolean isReachTheEnd = false;
 	
 	private class FilmListAdapter extends BaseAdapter{
 
@@ -141,18 +140,15 @@ public class FilmListFragment extends Fragment {
 				break;
 			case MSG_GET_FILMLIST_NOUPDATE:
 				break;
-			case MSG_GET_WILLFILMLIST_FAILED:
-				Toast.makeText(hostActivity, "更新列表失败", Toast.LENGTH_LONG).show();
-				break;
-			case MSG_GET_WILLFILMLIST_SUCCESS:
-				Toast.makeText(hostActivity, "更新列表成功", Toast.LENGTH_LONG).show();
-				break;
-			case MSG_GET_WILLFILMLIST_NOUPDATE:
-				break;
 			}
 			IFilmDao filmDao = new FilmImpl();
-			filmList = filmDao.getFilms(0, PAGE_LENGTH);
+			if(fragmentType == FRAGMENTTYPE_RECENT){
+				filmList = filmDao.getFilms(0, PAGE_LENGTH);
+			}else{
+				filmList = filmDao.getUpcomingFilms(0, PAGE_LENGTH);
+			}
 			adapter.notifyDataSetChanged();
+			listView.setOnScrollListener(FilmListFragment.this);
 		}
 	};
 	
@@ -187,6 +183,7 @@ public class FilmListFragment extends Fragment {
 				Intent intent = new Intent(hostActivity, FilmDetailActivity.class);
 				Film film = filmList.get(position);
 				intent.putExtra("id", film.id);
+				intent.putExtra("fragmentType", fragmentType);
 				hostActivity.startActivity(intent);
 			}
 		});
@@ -198,6 +195,7 @@ public class FilmListFragment extends Fragment {
 		listView = (ListView) getView().findViewById(R.id.lv_film);
 		adapter = new FilmListAdapter();
 		listView.setAdapter(adapter);
+		
 	}
 	
 	private void initData(){
@@ -205,11 +203,61 @@ public class FilmListFragment extends Fragment {
 			filmList = new ArrayList<Film>();
 		}
 		if(fragmentType == FRAGMENTTYPE_RECENT){
-//			filmList.add("fragment recent");
 			downloadFilmList();
 		}else{
-//			filmList.add("fragment upcoming");
+			downloadUpcomingFilmList();
 		}
+	}
+	
+	private void downloadUpcomingFilmList(){
+		new Thread(){
+			public void run() {
+				IFilmDao filmDao = new FilmImpl();
+				int startPos = filmDao.getMaxUpcomingFilmId();
+				URLParam param = new URLParam(null);
+				param.addParam("startPos", startPos);
+				param.addParam("cmd", URLProtocol.CMD_FILM_WILL);
+				String jsonStr = HttpConnection.httpGet(URLProtocol.ROOT, param);
+				//与服务器连接失败
+				if(jsonStr == null){
+					handler.sendEmptyMessage(MSG_CONNECT_FAILED);
+					return;
+				}
+				try {
+					JSONObject json = new JSONObject(jsonStr);
+					int code = json.getInt("code");
+					//有新增数据返回
+					if (code == 0) {
+						JSONArray jrray = json.getJSONArray("list");
+						int len = jrray.length();
+						List<Film> films = new ArrayList<Film>();
+						for (int i = 0; i < len; i++) {
+							JSONObject jo = jrray.getJSONObject(i);
+							Film film = new Film();
+							film.id = jo.getInt("mid");
+							film.name = jo.getString("name");
+							film.type = jo.getString("type");
+							film.time = jo.getString("time");
+							film.player = jo.getString("player");
+							film.image = jo.getString("image");
+							film.desc = jo.getString("desc");
+							film.timelong = jo.getString("tlong");
+							films.add(film);
+						}
+						filmDao.addUpcomingFilms(films);
+						handler.sendEmptyMessage(MSG_GET_FILMLIST_SUCCESS);
+						return;
+					}else if(code == 2){
+						handler.sendEmptyMessage(MSG_GET_FILMLIST_NOUPDATE);
+						return;
+					}
+					handler.sendEmptyMessage(MSG_GET_FILMLIST_FAILED);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}.start();
 	}
 	
 	private void downloadFilmList(){
@@ -247,7 +295,7 @@ public class FilmListFragment extends Fragment {
 							film.timelong = jo.getString("tlong");
 							films.add(film);
 						}
-						filmDao.addFimls(films);
+						filmDao.addFilms(films);
 						handler.sendEmptyMessage(MSG_GET_FILMLIST_SUCCESS);
 						return;
 					}else if(code == 2){
@@ -261,5 +309,36 @@ public class FilmListFragment extends Fragment {
 				}
 			}
 		}.start();
+	}
+
+	private void loadData(){
+		List<Film> addList = null;
+		IFilmDao filmDao = new FilmImpl();
+		if(fragmentType == FRAGMENTTYPE_RECENT){
+			addList = filmDao.getFilms(filmList.size(), PAGE_LENGTH);
+		}else{
+			addList = filmDao.getUpcomingFilms(filmList.size(), PAGE_LENGTH);
+		}
+		if(!addList.isEmpty()){
+			filmList.addAll(addList);
+			adapter.notifyDataSetChanged();
+		}else{
+			isReachTheEnd = true;
+		}
+	}
+	
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+		if(!isReachTheEnd&&totalItemCount - (firstVisibleItem + visibleItemCount) <= 3){
+			loadData();
+		}
 	}
 }

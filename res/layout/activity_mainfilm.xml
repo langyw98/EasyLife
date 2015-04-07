@@ -2,7 +2,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+	<LinearLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="50dp"
+	    android:orientation="horizontal"
+	    android:layout_gravity="center_horizontal">
+	    <LinearLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:clickable="true"
+	        android:id="@+id/tab_recent">
+	        <TextView 
+	            android:layout_height="wrap_content"
+	            android:layout_width="wrap_content"
+	            android:text="正在热映"/>
+	    </LinearLayout>
+	    <LinearLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:clickable="true"
+	        android:id="@+id/tab_upcoming">
+	        <TextView 
+	            android:layout_height="wrap_content"
+	            android:layout_width="wrap_content"
+	            android:text="即将上映"/>
+	    </LinearLayout>
+	</LinearLayout>
     <android.support.v4.view.ViewPager
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

@@ -1,10 +1,33 @@
 package cn.bdqn.life.net;
 
+import java.net.InetAddress;
+
 /**与服务器定义的接口协议*/
 public class URLProtocol {
 
 	/**服务器URL*/
-	public static final String ROOT = "http://liuy-PC:8080/leisurelife/dealcmd";
+//	public static final String ROOT = "http://liuy-PC:8080/leisurelife/dealcmd";
+	public static String IP = null;
+	static{
+		IP = getAllHostIPs("liuy-PC.jv.jb-aptech.com.cn");
+	};
+	public static final String ROOT = "http://" + IP + ":8080/leisurelife/dealcmd";
+	
+	public static String getAllHostIPs(String hostName){
+        String[] ips=null;
+        try{
+            InetAddress[] addrs=InetAddress.getAllByName(hostName);
+            if(null!=addrs){
+                ips=new String[addrs.length];
+                for(int i=0;i<addrs.length;i++){
+                    ips[i]=addrs[i].getHostAddress();
+                }
+            }
+        }catch(Exception e){
+            ips=null;
+        }
+        return ips[0];
+    }
 	
 	/**登录*/
 	public static final int CMD_LOGIN = 0;
