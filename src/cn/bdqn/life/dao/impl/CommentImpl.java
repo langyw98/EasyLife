@@ -55,6 +55,8 @@ public class CommentImpl implements ICommentDao {
 					comments.add(comment);
 				}
 				return comments;
+			}else if(code == 2){
+				return comments;
 			}else{
 				return null;
 			}

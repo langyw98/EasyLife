@@ -3,16 +3,14 @@ package cn.bdqn.life.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -28,9 +26,6 @@ import cn.bdqn.life.dao.impl.FilmImpl;
 import cn.bdqn.life.entity.Comment;
 import cn.bdqn.life.entity.Film;
 import cn.bdqn.life.fragment.FilmListFragment;
-import cn.bdqn.life.net.HttpConnection;
-import cn.bdqn.life.net.URLParam;
-import cn.bdqn.life.net.URLProtocol;
 
 public class FilmDetailActivity extends Activity {
 	private static final int MSG_GET_COMMENT_FAILED = 1;
@@ -48,6 +43,8 @@ public class FilmDetailActivity extends Activity {
 	private boolean isIntroductionFold = true;
 	private int type;
 	private int id;
+	private boolean isReachEnd = false;
+	private boolean isLoading = false;
 	
 	private Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
@@ -61,9 +58,11 @@ public class FilmDetailActivity extends Activity {
 				adapter.notifyDataSetChanged();
 				break;
 			case MSG_GET_COMMENT_NOUPDATE:
+				isReachEnd = true;
 				Toast.makeText(FilmDetailActivity.this, "ÒÑ¾­µ½µ×À²", Toast.LENGTH_SHORT).show();
 				break;
 			}
+			isLoading = false;
 		}
 	};
 	
@@ -173,6 +172,10 @@ public class FilmDetailActivity extends Activity {
 	}
 	
 	private void loadComment(final int startPos){
+		if(isLoading){
+			return;
+		}
+		isLoading = true;
 		new Thread(){
 			public void run() {
 				ICommentDao commentDao = new CommentImpl();
@@ -208,6 +211,28 @@ public class FilmDetailActivity extends Activity {
 						isIntroductionFold = true;
 					}
 				}
+			}
+		});
+		listView.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				// TODO Auto-generated method stub
+				if(!isReachEnd&&totalItemCount - (firstVisibleItem + visibleItemCount) <= 3){
+					int lastIndex = comments.size() - 1;
+					if(lastIndex >= 0){
+						int startPos = comments.get(lastIndex).id;
+						loadComment(startPos);
+					}
+				}
+				
 			}
 		});
 	}
