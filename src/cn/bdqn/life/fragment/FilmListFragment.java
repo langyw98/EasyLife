@@ -37,8 +37,8 @@ import cn.bdqn.life.utils.FileUtil;
 
 public class FilmListFragment extends Fragment implements OnScrollListener{
 	
-	public static final int FRAGMENTTYPE_RECENT = 0;
-	public static final int FRAGMENTTYPE_UPCOMING = 1;
+	public static final int FRAGMENTTYPE_RECENT = 1;
+	public static final int FRAGMENTTYPE_UPCOMING = 2;
 	
 	private static final int MSG_CONNECT_FAILED = 0;
 	private static final int MSG_GET_FILMLIST_FAILED = 1;
@@ -51,7 +51,7 @@ public class FilmListFragment extends Fragment implements OnScrollListener{
 	
 	private ListView listView;
 	private Activity hostActivity;
-	private List<Film> filmList;
+	private List<Film> filmList = new ArrayList<Film>();;
 	private FilmListAdapter adapter;
 	
 	private boolean isReachTheEnd = false;
@@ -168,9 +168,9 @@ public class FilmListFragment extends Fragment implements OnScrollListener{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		initData();
 		initView();
 		initEvent();
+		initData();
 	}
 	
 	private void initEvent(){
@@ -199,9 +199,6 @@ public class FilmListFragment extends Fragment implements OnScrollListener{
 	}
 	
 	private void initData(){
-		if(filmList == null){
-			filmList = new ArrayList<Film>();
-		}
 		if(fragmentType == FRAGMENTTYPE_RECENT){
 			downloadFilmList();
 		}else{

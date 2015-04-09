@@ -3,9 +3,14 @@ package cn.bdqn.life.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,18 +21,51 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.bdqn.life.R;
+import cn.bdqn.life.dao.ICommentDao;
 import cn.bdqn.life.dao.IFilmDao;
+import cn.bdqn.life.dao.impl.CommentImpl;
 import cn.bdqn.life.dao.impl.FilmImpl;
 import cn.bdqn.life.entity.Comment;
 import cn.bdqn.life.entity.Film;
 import cn.bdqn.life.fragment.FilmListFragment;
+import cn.bdqn.life.net.HttpConnection;
+import cn.bdqn.life.net.URLParam;
+import cn.bdqn.life.net.URLProtocol;
 
 public class FilmDetailActivity extends Activity {
-
+	private static final int MSG_GET_COMMENT_FAILED = 1;
+	private static final int MSG_GET_COMMENT_SUCCESS = 2;
+	private static final int MSG_GET_COMMENT_NOUPDATE = 3;
+	
+	private static final int PAGELENGTH = 10;
+	
 	private Film film;
 	private ListView listView;
 	private ListViewAdapter adapter;
 	private List<Comment> comments = new ArrayList<Comment>();
+	private List<Comment> loadComments; 
+	
+	private boolean isIntroductionFold = true;
+	private int type;
+	private int id;
+	
+	private Handler handler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			
+			switch(msg.what){
+			case MSG_GET_COMMENT_FAILED:
+				Toast.makeText(FilmDetailActivity.this, "获取评论失败", Toast.LENGTH_SHORT).show();
+				break;
+			case MSG_GET_COMMENT_SUCCESS:
+				comments.addAll(loadComments);
+				adapter.notifyDataSetChanged();
+				break;
+			case MSG_GET_COMMENT_NOUPDATE:
+				Toast.makeText(FilmDetailActivity.this, "已经到底啦", Toast.LENGTH_SHORT).show();
+				break;
+			}
+		}
+	};
 	
 	private class ListViewAdapter extends BaseAdapter{
 
@@ -117,8 +155,8 @@ public class FilmDetailActivity extends Activity {
 		setContentView(R.layout.activity_filmdetail);
 		
 		Intent intent = getIntent();
-		int id = intent.getIntExtra("id", -1);
-		int type = intent.getIntExtra("fragmentType", -1);
+		id = intent.getIntExtra("id", -1);
+		type = intent.getIntExtra("fragmentType", -1);
 		if(id == -1 || type == -1){
 			finish();
 			Toast.makeText(this, "数据获取失败", Toast.LENGTH_LONG).show();
@@ -131,6 +169,23 @@ public class FilmDetailActivity extends Activity {
 			film = filmdao.getUpcomingFilm(id);
 		}
 		initView();
+		loadComment(-1);
+	}
+	
+	private void loadComment(final int startPos){
+		new Thread(){
+			public void run() {
+				ICommentDao commentDao = new CommentImpl();
+				loadComments = commentDao.getComments(type, id, startPos, PAGELENGTH);
+				if(loadComments == null){
+					handler.sendEmptyMessage(MSG_GET_COMMENT_FAILED);
+				}else if(loadComments.size() == 0){
+					handler.sendEmptyMessage(MSG_GET_COMMENT_NOUPDATE);
+				}else{
+					handler.sendEmptyMessage(MSG_GET_COMMENT_SUCCESS);
+				}
+			}
+		}.start();
 	}
 	
 	private void initView(){
@@ -143,7 +198,16 @@ public class FilmDetailActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				
+				if(position == 1){
+					TextView introduction = (TextView) view.findViewById(R.id.tv_introduction);
+					if(isIntroductionFold){
+						introduction.setMaxLines(100);
+						isIntroductionFold = false;
+					}else{
+						introduction.setMaxLines(2);
+						isIntroductionFold = true;
+					}
+				}
 			}
 		});
 	}

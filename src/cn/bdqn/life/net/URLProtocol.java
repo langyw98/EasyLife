@@ -37,9 +37,11 @@ public class URLProtocol {
 	
 	/**获取评论*/
 	public static final int CMD_GET_REC = 2;
+	public static final int CMD_GET_COMMENT = 2;
 	
 	/**发布评论*/
 	public static final int CMD_SEND_REC = 3;
+	public static final int CMD_SEND_COMMENT = 2;
 	
 	/**获取图片*/
 	public static final int CMD_GET_IMAGE = 4;

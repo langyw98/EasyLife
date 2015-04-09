@@ -3,6 +3,10 @@ package cn.bdqn.life.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,40 +14,55 @@ import cn.bdqn.life.MyApplication;
 import cn.bdqn.life.dao.ICommentDao;
 import cn.bdqn.life.database.LifeDatabaseOpenHelper;
 import cn.bdqn.life.entity.Comment;
+import cn.bdqn.life.entity.Film;
+import cn.bdqn.life.net.HttpConnection;
+import cn.bdqn.life.net.URLParam;
+import cn.bdqn.life.net.URLProtocol;
 
 public class CommentImpl implements ICommentDao {
 
 	@Override
-	public List<Comment> getComments(int type, int tid, int posStart,
+	public List<Comment> getComments(int type, int tid, int startPos,
 			int pageLength) {
-		LifeDatabaseOpenHelper helper = new LifeDatabaseOpenHelper(
-				MyApplication.getInstance());
-		SQLiteDatabase db = helper.getWritableDatabase();
-		String[] columns = { "id", "username", "type", "time", "content", "tid" };
-		String selection = "type = ? AND tid = ?";
-		String[] selectionArgs = { "" + type, "" +  tid};
-		String orderBy = "id desc";
-		String limit = posStart + "," + pageLength;
-		Cursor cursor = db.query("comment", columns, selection, selectionArgs,
-				null, null, orderBy, limit);
 		List<Comment> comments = new ArrayList<Comment>();
-		if (cursor != null) {
-			while (cursor.moveToNext()) {
-				Comment comment = new Comment();
-				comment.id = cursor.getInt(cursor.getColumnIndex("id"));
-				comment.userName = cursor.getString(cursor
-						.getColumnIndex("username"));
-				comment.type = cursor.getInt(cursor.getColumnIndex("type"));
-				comment.time = cursor.getString(cursor.getColumnIndex("time"));
-				comment.content = cursor.getString(cursor
-						.getColumnIndex("content"));
-				comment.tid = cursor.getInt(cursor.getColumnIndex("tid"));
-				comments.add(comment);
-			}
-			cursor.close();
+		URLParam param = new URLParam(null);
+		param.addParam("startPos", startPos);
+		param.addParam("type", type);
+		param.addParam("tid", tid);
+		param.addParam("pageLength", pageLength);
+		param.addParam("cmd", URLProtocol.CMD_GET_COMMENT);
+		String jsonStr = HttpConnection.httpGet(URLProtocol.ROOT, param);
+		//与服务器连接失败
+		if(jsonStr == null){
+			return null;
 		}
-		db.close();
-		return comments;
+		try {
+			JSONObject json = new JSONObject(jsonStr);
+			int code = json.getInt("code");
+			//有新增数据返回
+			if (code == 0) {
+				JSONArray jrray = json.getJSONArray("list");
+				int len = jrray.length();
+				for (int i = 0; i < len; i++) {
+					JSONObject jo = jrray.getJSONObject(i);
+					Comment comment = new Comment();
+					comment.id = jo.getInt("recid");
+					comment.tid = jo.getInt("tid");
+					comment.type = jo.getInt("type");
+					comment.userName = jo.getString("name");
+					comment.time = jo.getString("time");
+					comment.content = jo.getString("content");
+					comments.add(comment);
+				}
+				return comments;
+			}else{
+				return null;
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
