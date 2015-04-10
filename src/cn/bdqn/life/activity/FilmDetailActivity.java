@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.bdqn.life.R;
+import cn.bdqn.life.customview.CommentsListView;
 import cn.bdqn.life.dao.ICommentDao;
 import cn.bdqn.life.dao.IFilmDao;
 import cn.bdqn.life.dao.impl.CommentImpl;
@@ -35,7 +36,7 @@ public class FilmDetailActivity extends Activity {
 	private static final int PAGELENGTH = 10;
 	
 	private Film film;
-	private ListView listView;
+	private CommentsListView listView;
 	private ListViewAdapter adapter;
 	private List<Comment> comments = new ArrayList<Comment>();
 	private List<Comment> loadComments; 
@@ -63,6 +64,7 @@ public class FilmDetailActivity extends Activity {
 				break;
 			}
 			isLoading = false;
+			listView.showLoadingFooter(false);
 		}
 	};
 	
@@ -176,8 +178,15 @@ public class FilmDetailActivity extends Activity {
 			return;
 		}
 		isLoading = true;
+		listView.showLoadingFooter(true);
 		new Thread(){
 			public void run() {
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				ICommentDao commentDao = new CommentImpl();
 				loadComments = commentDao.getComments(type, id, startPos, PAGELENGTH);
 				if(loadComments == null){
@@ -192,7 +201,7 @@ public class FilmDetailActivity extends Activity {
 	}
 	
 	private void initView(){
-		listView = (ListView) findViewById(R.id.lv_film);
+		listView = (CommentsListView) findViewById(R.id.lv_film);
 		adapter = new ListViewAdapter();
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
