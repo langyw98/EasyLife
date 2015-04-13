@@ -6,5 +6,5 @@ import cn.bdqn.life.entity.Comment;
 
 public interface ICommentDao {
 	public List<Comment> getComments(int type, int tid, int posStart, int pageLength);
-	public void addComment(Comment comment);
+	public Comment addComment(Comment comment);
 }

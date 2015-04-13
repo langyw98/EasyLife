@@ -102,6 +102,7 @@ public class LoginActivity extends Activity {
 						LifePreferences.getPreferences().setUID(uid);
 						LifePreferences.getPreferences().saveName(strAccount);
 						LifePreferences.getPreferences().savePW(strPassword);
+						LifePreferences.getPreferences().saveNickName((String)json.get("nickName"));
 						
 						handler.sendEmptyMessage(MSG_LOGIN_SUCCESS);
 						return;

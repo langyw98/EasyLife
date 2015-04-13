@@ -9,7 +9,8 @@ public class URLProtocol {
 //	public static final String ROOT = "http://liuy-PC:8080/leisurelife/dealcmd";
 	public static String IP = null;
 	static{
-		IP = getAllHostIPs("liuy-PC.jv.jb-aptech.com.cn");
+//		IP = getAllHostIPs("liuy-PC.jv.jb-aptech.com.cn");
+		IP = "192.168.9.194";
 	};
 	public static final String ROOT = "http://" + IP + ":8080/leisurelife/dealcmd";
 	
@@ -41,7 +42,7 @@ public class URLProtocol {
 	
 	/**发布评论*/
 	public static final int CMD_SEND_REC = 3;
-	public static final int CMD_SEND_COMMENT = 2;
+	public static final int CMD_SEND_COMMENT = 3;
 	
 	/**获取图片*/
 	public static final int CMD_GET_IMAGE = 4;

@@ -14,6 +14,7 @@ public class LifePreferences {
 	private  final String REMBER_PW="rember_pw";
 	private  final String USERNAME="username";
 	private  final String PASSWORD="password";
+	private  final String NICKNAME="nickname";
 	
 	private static LifePreferences lifeInstance;
 	private  SharedPreferences lifePreferences;
@@ -52,6 +53,20 @@ public class LifePreferences {
 	/**获取用户名*/
 	public String getName(){
 		String bname = lifePreferences.getString(USERNAME, "");
+		return new String(Base64.decode(bname, Base64.DEFAULT));
+		
+	}
+	
+	/**保存昵称*/
+	public void saveNickName(String name){
+		Editor editor = lifePreferences.edit();
+		String bname = new String(Base64.encode(name.getBytes(), Base64.DEFAULT));
+		editor.putString(NICKNAME, bname);
+		editor.commit();
+	}
+	/**获取昵称*/
+	public String getNickName(){
+		String bname = lifePreferences.getString(NICKNAME, new String(Base64.encode("NickName".getBytes(), Base64.DEFAULT)));
 		return new String(Base64.decode(bname, Base64.DEFAULT));
 		
 	}

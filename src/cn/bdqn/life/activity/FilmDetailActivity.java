@@ -1,6 +1,8 @@
 package cn.bdqn.life.activity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -8,14 +10,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.bdqn.life.R;
@@ -24,6 +29,7 @@ import cn.bdqn.life.dao.ICommentDao;
 import cn.bdqn.life.dao.IFilmDao;
 import cn.bdqn.life.dao.impl.CommentImpl;
 import cn.bdqn.life.dao.impl.FilmImpl;
+import cn.bdqn.life.data.LifePreferences;
 import cn.bdqn.life.entity.Comment;
 import cn.bdqn.life.entity.Film;
 import cn.bdqn.life.fragment.FilmListFragment;
@@ -33,13 +39,21 @@ public class FilmDetailActivity extends Activity {
 	private static final int MSG_GET_COMMENT_SUCCESS = 2;
 	private static final int MSG_GET_COMMENT_NOUPDATE = 3;
 	
+	private static final int MSG_ADD_COMMENT_FAILED = 4;
+	private static final int MSG_ADD_COMMENT_SUCCESS = 5;
+	
 	private static final int PAGELENGTH = 10;
 	
-	private Film film;
 	private CommentsListView listView;
+	private LinearLayout ll_comment;
+	private EditText et_comment;
+	private Button btn_comment;
+	
+	private Film film;
 	private ListViewAdapter adapter;
 	private List<Comment> comments = new ArrayList<Comment>();
 	private List<Comment> loadComments; 
+	private Comment addComment;
 	
 	private boolean isIntroductionFold = true;
 	private int type;
@@ -53,18 +67,32 @@ public class FilmDetailActivity extends Activity {
 			switch(msg.what){
 			case MSG_GET_COMMENT_FAILED:
 				Toast.makeText(FilmDetailActivity.this, "获取评论失败", Toast.LENGTH_SHORT).show();
+				isLoading = false;
+				listView.showLoadingFooter(false);
 				break;
 			case MSG_GET_COMMENT_SUCCESS:
 				comments.addAll(loadComments);
 				adapter.notifyDataSetChanged();
+				isLoading = false;
+				listView.showLoadingFooter(false);
 				break;
 			case MSG_GET_COMMENT_NOUPDATE:
 				isReachEnd = true;
 				Toast.makeText(FilmDetailActivity.this, "已经到底啦", Toast.LENGTH_SHORT).show();
+				isLoading = false;
+				listView.showLoadingFooter(false);
+				break;
+			case MSG_ADD_COMMENT_FAILED:
+				addComment = null;
+				Toast.makeText(FilmDetailActivity.this, "评论发送失败", Toast.LENGTH_SHORT).show();
+				break;
+			case MSG_ADD_COMMENT_SUCCESS:
+				comments.add(0, addComment);
+				addComment = null;
+				adapter.notifyDataSetChanged();
 				break;
 			}
-			isLoading = false;
-			listView.showLoadingFooter(false);
+			
 		}
 	};
 	
@@ -181,12 +209,6 @@ public class FilmDetailActivity extends Activity {
 		listView.showLoadingFooter(true);
 		new Thread(){
 			public void run() {
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				ICommentDao commentDao = new CommentImpl();
 				loadComments = commentDao.getComments(type, id, startPos, PAGELENGTH);
 				if(loadComments == null){
@@ -201,7 +223,11 @@ public class FilmDetailActivity extends Activity {
 	}
 	
 	private void initView(){
+		ll_comment = (LinearLayout) findViewById(R.id.ll_comment);
+		et_comment = (EditText) findViewById(R.id.et_comment);
+		btn_comment = (Button) findViewById(R.id.btn_comment);
 		listView = (CommentsListView) findViewById(R.id.lv_film);
+		
 		adapter = new ListViewAdapter();
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -241,7 +267,48 @@ public class FilmDetailActivity extends Activity {
 						loadComment(startPos);
 					}
 				}
+				if(ll_comment == null){
+					return;
+				}
+				if(firstVisibleItem + visibleItemCount >= 3){
+					ll_comment.setVisibility(View.VISIBLE);
+				}else{
+					ll_comment.setVisibility(View.GONE);
+				}
 				
+			}
+		});
+		
+
+		btn_comment.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				final String strComment = et_comment.getText().toString().trim();
+				if(strComment.isEmpty()){
+					Toast.makeText(FilmDetailActivity.this, "无法发送空评论！", Toast.LENGTH_SHORT).show();
+				}else{
+					new Thread(){
+						public void run() {
+							Comment comment = new Comment();
+							LifePreferences.getPreferences().init(getApplicationContext());
+							comment.userName = LifePreferences.getPreferences().getNickName();
+							comment.content = strComment;
+							comment.type = type;
+							comment.tid = id;
+							comment.time = null;
+							ICommentDao commentDao = new CommentImpl();
+							addComment = commentDao.addComment(comment);
+							if(addComment != null){
+								handler.sendEmptyMessage(MSG_ADD_COMMENT_SUCCESS);
+							}else{
+								handler.sendEmptyMessage(MSG_ADD_COMMENT_FAILED);
+							}
+						};
+					}.start();
+					et_comment.setText("");
+				}
 			}
 		});
 	}

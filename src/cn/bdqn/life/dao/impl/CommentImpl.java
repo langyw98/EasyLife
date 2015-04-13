@@ -1,6 +1,9 @@
 package cn.bdqn.life.dao.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -8,13 +11,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import cn.bdqn.life.MyApplication;
 import cn.bdqn.life.dao.ICommentDao;
 import cn.bdqn.life.database.LifeDatabaseOpenHelper;
 import cn.bdqn.life.entity.Comment;
-import cn.bdqn.life.entity.Film;
 import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;
 import cn.bdqn.life.net.URLProtocol;
@@ -68,19 +69,35 @@ public class CommentImpl implements ICommentDao {
 	}
 
 	@Override
-	public void addComment(Comment comment) {
-		// TODO Auto-generated method stub
-		LifeDatabaseOpenHelper helper = new LifeDatabaseOpenHelper(MyApplication.getInstance());
-		SQLiteDatabase db = helper.getWritableDatabase();
-		ContentValues values = new ContentValues();
-		values.put("id", comment.id);
-		values.put("content", comment.content);
-		values.put("time", comment.time);
-		values.put("username", comment.userName);
-		values.put("tid", comment.tid);
-		values.put("type", comment.type);
-		db.insert("comment", null, values);
-		db.close();
+	public Comment addComment(Comment comment) {
+		URLParam param = new URLParam(null);
+		param.addParam("name", comment.userName);
+		param.addParam("type", comment.type);
+		param.addParam("tid", comment.id);
+		param.addParam("content", comment.content);
+		param.addParam("cmd", URLProtocol.CMD_SEND_COMMENT);
+		String jsonStr = HttpConnection.httpGet(URLProtocol.ROOT, param);
+		//与服务器连接失败
+		if(jsonStr == null){
+			return null;
+		}
+		try {
+			JSONObject json = new JSONObject(jsonStr);
+			int code = json.getInt("code");
+			//有新增数据返回
+			if (code == 0) {
+				comment.id = json.getInt("recid");
+				comment.time = json.getString("time");
+				return comment;
+			}else{
+				return null;
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 }
