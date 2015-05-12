@@ -5,15 +5,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import cn.bdqn.life.R;
+import cn.bdqn.life.customview.SlidingMenu;
 import cn.bdqn.life.fragment.FavorFragment;
 import cn.bdqn.life.fragment.MainFragment;
 import cn.bdqn.life.fragment.RecommendFragment;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity{
 	
 	private static final int TAB_1 = 0;
 	private static final int TAB_2 = 1;
@@ -28,6 +31,8 @@ public class MainActivity extends FragmentActivity {
 	private Fragment mainFragment;
 	private Fragment recommendFragment;
 	private Fragment favorFragment;
+	
+	private SlidingMenu slidingMenu;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +117,7 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 		
+		
 	}
 	
 	private void initView() {
@@ -121,21 +127,42 @@ public class MainActivity extends FragmentActivity {
 		lTabRecommend = (LinearLayout) findViewById(R.id.tab_2);
 		lTabFavor = (LinearLayout) findViewById(R.id.tab_3);	
 		
+		slidingMenu = (SlidingMenu) findViewById(R.id.slidingmenu);
 	}
 	
-	 private void hideFragments(FragmentTransaction transaction)  
-	    {  
-	        if (mainFragment != null)  
-	        {  
-	            transaction.hide(mainFragment);  
-	        }  
-	        if (recommendFragment != null)  
-	        {  
-	            transaction.hide(recommendFragment);  
-	        }  
-	        if (favorFragment != null)  
-	        {  
-	            transaction.hide(favorFragment);  
-	        }  
-	    } 
+	private void hideFragments(FragmentTransaction transaction) {
+		if (mainFragment != null) {
+			transaction.hide(mainFragment);
+		}
+		if (recommendFragment != null) {
+			transaction.hide(recommendFragment);
+		}
+		if (favorFragment != null) {
+			transaction.hide(favorFragment);
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		if(slidingMenu.isOpened()){
+			slidingMenu.close();
+		}else{
+			super.onBackPressed();
+		}
+	}
+
+//	@Override
+//	public boolean dispatchTouchEvent(MotionEvent ev) {
+//		// TODO Auto-generated method stub
+//		if(slidingMenu.isOpened() && ev.getAction() == MotionEvent.ACTION_DOWN){
+//			int pos_X = (int) ev.getX();
+//			if(pos_X > slidingMenu.getMenuWidth()){
+//				return true;
+//			}
+//		}
+//		return super.dispatchTouchEvent(ev);
+//	}
+//	
+	
 }

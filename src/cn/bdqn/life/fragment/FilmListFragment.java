@@ -102,7 +102,7 @@ public class FilmListFragment extends Fragment implements OnScrollListener{
 					film.icon = BitmapDrawable.createFromPath(path);
 					viewHolder.ivPhoto.setBackground(film.icon);;
 				}else{
-					viewHolder.ivPhoto.setBackgroundResource(R.id.label);
+//					viewHolder.ivPhoto.setBackgroundResource(R.id.label);
 				}
 			} else {
 				viewHolder.ivPhoto.setBackground(film.icon);;

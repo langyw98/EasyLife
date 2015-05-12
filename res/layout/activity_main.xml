@@ -2,13 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <FrameLayout 
-	    android:id="@+id/content"
-	    android:layout_width="fill_parent"
-	    android:layout_height="0dp"
-	    android:layout_weight="1"
-	    ></FrameLayout>
+    android:orientation="vertical" >
 
-	<include layout="@layout/include_bottombar"/>
+    <cn.bdqn.life.customview.SlidingMenu
+        android:id="@+id/slidingmenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <include 
+                layout="@layout/include_slidingmenu" >
+            </include>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <FrameLayout
+                    android:id="@+id/content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" 
+                    android:layout_weight="1">
+                </FrameLayout>
+                <include layout="@layout/include_bottombar" />
+            </LinearLayout>
+        </LinearLayout>
+    </cn.bdqn.life.customview.SlidingMenu>
+
+    
+
 </LinearLayout>

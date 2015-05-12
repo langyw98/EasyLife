@@ -53,6 +53,13 @@ public class LifeDatabaseOpenHelper extends SQLiteOpenHelper {
 				  "time VARCHAER,"+
 				  "type INTEGER,"+
 				  "tid INTEGER)");
+		/*
+		 *创建推荐表：id(编号),type(推荐类型),t_id(推荐条目在此类型中对应的id)
+		 *type(推荐类型)：1.正在上映的电影；2.即将上映的电影；3.美食；4.演出；5.展览*/
+		db.execSQL("CREATE TABLE recommend (" +
+				  "id INTEGER NOT NULL PRIMARY KEY,"+
+				  "type INTEGER,"+
+				  "t_id INTEGER");
 	}
 
 	@Override
