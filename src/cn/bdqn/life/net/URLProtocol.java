@@ -94,4 +94,7 @@ public class URLProtocol {
 	
 	/**获取即将上映电影详情*/
 	public static final int CMD_FILM_WILL_DETAIL = 802;
+	
+	/**获取推荐列表*/
+	public static final int CMD_RECOMMEND = 901;
 }

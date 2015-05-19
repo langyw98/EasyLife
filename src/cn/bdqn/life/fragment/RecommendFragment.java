@@ -3,8 +3,15 @@ package cn.bdqn.life.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,22 +22,59 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.bdqn.life.R;
+import cn.bdqn.life.activity.FilmDetailActivity;
+import cn.bdqn.life.dao.IFilmDao;
+import cn.bdqn.life.dao.IRecommendDao;
+import cn.bdqn.life.dao.impl.FilmImpl;
+import cn.bdqn.life.dao.impl.RecommendImpl;
 import cn.bdqn.life.entity.Exhibition;
 import cn.bdqn.life.entity.Film;
 import cn.bdqn.life.entity.FilmRecommend;
 import cn.bdqn.life.entity.Food;
+import cn.bdqn.life.entity.Recommend;
 import cn.bdqn.life.entity.Show;
+import cn.bdqn.life.net.HttpConnection;
+import cn.bdqn.life.net.URLParam;
+import cn.bdqn.life.net.URLProtocol;
 import cn.bdqn.life.utils.FileUtil;
 
 public class RecommendFragment extends Fragment {
+	private static final int MSG_CONNECT_FAILED = 0;
+	private static final int MSG_GET_RECOMMEND_FAILED = 1;
+	private static final int MSG_GET_RECOMMEND_SUCCESS = 2;
 	
 	private ListView listView;
+	private Activity hostActivity;
+	private RecommendAdapter adapter;
+	
 	private List filmList = new ArrayList<FilmRecommend>();
 	private List exhibitionList = new ArrayList<Exhibition>();
 	private List foodList = new ArrayList<Food>();
 	private List showList = new ArrayList<Show>();
 	
+	private Handler handler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			switch(msg.what){
+			case MSG_CONNECT_FAILED:
+				Toast.makeText(hostActivity, "连接服务器失败", Toast.LENGTH_LONG).show();
+				break;
+			case MSG_GET_RECOMMEND_FAILED:
+				Toast.makeText(hostActivity, "更新列表失败", Toast.LENGTH_LONG).show();
+				break;
+			case MSG_GET_RECOMMEND_SUCCESS:
+				Toast.makeText(hostActivity, "更新列表成功", Toast.LENGTH_LONG).show();
+				break;
+			}
+			IRecommendDao recommendDao = new RecommendImpl();
+			filmList = recommendDao.getFilmRecommendList();
+			exhibitionList = recommendDao.getExhibitionRecommendList();
+			foodList = recommendDao.getFoodRecommendList();
+			showList = recommendDao.getShowRecommendList();
+			adapter.notifyDataSetChanged();
+		};
+	};
 	private class RecommendAdapter extends BaseAdapter{
 		//推荐列表显示顺序1.电影 2.美食 3.演出 4.展览
 		private View[] labelItem = new View[4];
@@ -164,7 +208,9 @@ public class RecommendFragment extends Fragment {
 	}
 	
 	private void initView(){
+		hostActivity = getActivity();
 		listView = (ListView) getView().findViewById(R.id.lv_recommend);
+		adapter = new RecommendAdapter();
 	}
 	
 	private void initEvent(){
@@ -174,13 +220,66 @@ public class RecommendFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				
+				Object item = adapter.getItem(position);
+				if(item instanceof FilmRecommend){
+					Intent intent = new Intent(hostActivity, FilmDetailActivity.class);
+					FilmRecommend film = (FilmRecommend)item;
+					intent.putExtra("id", film.id);
+					if(film.isShowing){
+						intent.putExtra("fragmentType", 1);
+					}else{
+						intent.putExtra("fragmentType", 2);
+					}
+					hostActivity.startActivity(intent);
+				}else if(item instanceof Food){
+					
+				}else if(item instanceof Exhibition){
+					
+				}else if(item instanceof Show){
+					
+				}
 			}
 		});
 	}
 	
 	private void initData() {
 		// TODO Auto-generated method stub
-		
+		new Thread(){
+			public void run() {
+				IRecommendDao recommendDao = new RecommendImpl();
+				URLParam param = new URLParam(null);
+				param.addParam("cmd", URLProtocol.CMD_RECOMMEND);
+				String jsonStr = HttpConnection.httpGet(URLProtocol.ROOT, param);
+				//与服务器连接失败
+				if(jsonStr == null){
+					handler.sendEmptyMessage(MSG_CONNECT_FAILED);
+					return;
+				}
+				try {
+					JSONObject json = new JSONObject(jsonStr);
+					int code = json.getInt("code");
+					//有新增数据返回
+					if (code == 0) {
+						JSONArray jrray = json.getJSONArray("list");
+						int len = jrray.length();
+						List<Recommend> recommends = new ArrayList<Recommend>();
+						for (int i = 0; i < len; i++) {
+							JSONObject jo = jrray.getJSONObject(i);
+							Recommend recommend = new Recommend();
+							recommend.tid = jo.getInt("tid");
+							recommend.type = jo.getInt("type");
+							recommends.add(recommend);
+						}
+						recommendDao.updateRecommendList(recommends);
+						handler.sendEmptyMessage(MSG_GET_RECOMMEND_SUCCESS);
+						return;
+					}
+					handler.sendEmptyMessage(MSG_GET_RECOMMEND_FAILED);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			};
+		}.start();
 	}
 }

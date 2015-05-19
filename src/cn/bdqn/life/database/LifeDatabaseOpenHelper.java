@@ -59,7 +59,7 @@ public class LifeDatabaseOpenHelper extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE recommend (" +
 				  "id INTEGER NOT NULL PRIMARY KEY,"+
 				  "type INTEGER,"+
-				  "t_id INTEGER");
+				  "t_id INTEGER)");
 	}
 
 	@Override
