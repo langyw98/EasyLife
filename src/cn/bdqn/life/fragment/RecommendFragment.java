@@ -25,12 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.bdqn.life.R;
 import cn.bdqn.life.activity.FilmDetailActivity;
-import cn.bdqn.life.dao.IFilmDao;
 import cn.bdqn.life.dao.IRecommendDao;
-import cn.bdqn.life.dao.impl.FilmImpl;
 import cn.bdqn.life.dao.impl.RecommendImpl;
 import cn.bdqn.life.entity.Exhibition;
-import cn.bdqn.life.entity.Film;
 import cn.bdqn.life.entity.FilmRecommend;
 import cn.bdqn.life.entity.Food;
 import cn.bdqn.life.entity.Recommend;
@@ -39,6 +36,7 @@ import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;
 import cn.bdqn.life.net.URLProtocol;
 import cn.bdqn.life.utils.FileUtil;
+import cn.bdqn.life.utils.LoadImageUtil;
 
 public class RecommendFragment extends Fragment {
 	private static final int MSG_CONNECT_FAILED = 0;
@@ -49,10 +47,10 @@ public class RecommendFragment extends Fragment {
 	private Activity hostActivity;
 	private RecommendAdapter adapter;
 	
-	private List filmList = new ArrayList<FilmRecommend>();
-	private List exhibitionList = new ArrayList<Exhibition>();
-	private List foodList = new ArrayList<Food>();
-	private List showList = new ArrayList<Show>();
+	private List<FilmRecommend> filmList = new ArrayList<FilmRecommend>();
+	private List<Exhibition> exhibitionList = new ArrayList<Exhibition>();
+	private List<Food> foodList = new ArrayList<Food>();
+	private List<Show> showList = new ArrayList<Show>();
 	
 	private Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
@@ -64,7 +62,6 @@ public class RecommendFragment extends Fragment {
 				Toast.makeText(hostActivity, "更新列表失败", Toast.LENGTH_LONG).show();
 				break;
 			case MSG_GET_RECOMMEND_SUCCESS:
-				Toast.makeText(hostActivity, "更新列表成功", Toast.LENGTH_LONG).show();
 				break;
 			}
 			IRecommendDao recommendDao = new RecommendImpl();
@@ -97,19 +94,19 @@ public class RecommendFragment extends Fragment {
 				return "电影推荐";
 			}else if(position < 1 + filmSize){
 				return filmList.get(position - 1);
-			}else if(position == 2 + filmSize){
+			}else if(position == 1 + filmSize){
 				return "美食推荐";
-			}else if(position < 2 + filmSize + foodSize){
-				return foodList.get(position - 2 - filmSize);
-			}else if(position == 3 + filmSize + foodSize){
+			}else if(position < 1 + filmSize + foodSize){
+				return foodList.get(position - 1 - filmSize);
+			}else if(position == 2 + filmSize + foodSize){
 				return "演出推荐";
-			}else if(position < 3 + filmSize + foodSize + showSize){
-				return showList.get(position - 3 - filmSize - foodSize);
-			}else if(position == 4 + filmSize + foodSize + showSize){
+			}else if(position < 2 + filmSize + foodSize + showSize){
+				return showList.get(position - 2 - filmSize - foodSize);
+			}else if(position == 3 + filmSize + foodSize + showSize){
 				return "展览推荐";
-			}else if(position < 4 + filmSize + foodSize + showSize + foodSize 
-					&& position < 4 + filmSize + foodSize + showSize + foodSize + exhibitionSize){
-				return exhibitionList.get(position - 4 - filmSize - foodSize - showSize);
+			}else if(position < 3 + filmSize + foodSize + showSize + foodSize 
+					&& position < 3 + filmSize + foodSize + showSize + foodSize + exhibitionSize){
+				return exhibitionList.get(position - 3 - filmSize - foodSize - showSize);
 			}
 			return null;
 		}
@@ -154,7 +151,7 @@ public class RecommendFragment extends Fragment {
 					view = labelItem[3];
 				}
 				
-				TextView tvLabel = (TextView) labelItem[0].findViewById(R.id.tv_label);
+				TextView tvLabel = (TextView) view.findViewById(R.id.tv_label);
 				tvLabel.setText((String)data);
 			}else if(data instanceof FilmRecommend){
 				view = View.inflate(getActivity(), R.layout.item_filmlist, null);
@@ -164,16 +161,17 @@ public class RecommendFragment extends Fragment {
 				TextView tvTime = (TextView) view.findViewById(R.id.tv_time);
 				
 				FilmRecommend film = (FilmRecommend) data;
+
 				if (film.icon == null) {
 					if(FileUtil.imageExist(film.image)){
 						String path = FileUtil.IMAGEDIR+ FileUtil.separator+ film.image + ".life";
 						film.icon = BitmapDrawable.createFromPath(path);
-						ivPhoto.setBackground(film.icon);;
+						ivPhoto.setImageDrawable(film.icon);;
 					}else{
-//						ivPhoto.setBackgroundResource(R.id.label);
+						LoadImageUtil.loadImage(ivPhoto, film.image);
 					}
 				} else {
-					ivPhoto.setBackground(film.icon);;
+					ivPhoto.setImageDrawable(film.icon);;
 				}
 				tvName.setText(film.name);
 				tvLabel.setText(film.type);
@@ -211,6 +209,7 @@ public class RecommendFragment extends Fragment {
 		hostActivity = getActivity();
 		listView = (ListView) getView().findViewById(R.id.lv_recommend);
 		adapter = new RecommendAdapter();
+		listView.setAdapter(adapter);
 	}
 	
 	private void initEvent(){
@@ -282,4 +281,6 @@ public class RecommendFragment extends Fragment {
 			};
 		}.start();
 	}
+	
+	
 }

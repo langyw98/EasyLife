@@ -1,12 +1,15 @@
 package cn.bdqn.life.activity;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -26,13 +29,21 @@ import android.widget.Toast;
 import cn.bdqn.life.R;
 import cn.bdqn.life.customview.CommentsListView;
 import cn.bdqn.life.dao.ICommentDao;
+import cn.bdqn.life.dao.IFavorDao;
 import cn.bdqn.life.dao.IFilmDao;
 import cn.bdqn.life.dao.impl.CommentImpl;
+import cn.bdqn.life.dao.impl.FavorImpl;
 import cn.bdqn.life.dao.impl.FilmImpl;
 import cn.bdqn.life.data.LifePreferences;
 import cn.bdqn.life.entity.Comment;
+import cn.bdqn.life.entity.Favor;
 import cn.bdqn.life.entity.Film;
 import cn.bdqn.life.fragment.FilmListFragment;
+import cn.bdqn.life.net.HttpConnection;
+import cn.bdqn.life.net.URLParam;
+import cn.bdqn.life.net.URLProtocol;
+import cn.bdqn.life.utils.FileUtil;
+import cn.bdqn.life.utils.LoadImageUtil;
 
 public class FilmDetailActivity extends Activity {
 	private static final int MSG_GET_COMMENT_FAILED = 1;
@@ -41,6 +52,9 @@ public class FilmDetailActivity extends Activity {
 	
 	private static final int MSG_ADD_COMMENT_FAILED = 4;
 	private static final int MSG_ADD_COMMENT_SUCCESS = 5;
+	
+	private static final int MSG_CHANGE_FAVOR_FAILED = 6;
+	private static final int MSG_CHANGE_FAVOR_SUCCESS = 7;
 	
 	private static final int PAGELENGTH = 10;
 	
@@ -60,6 +74,7 @@ public class FilmDetailActivity extends Activity {
 	private int id;
 	private boolean isReachEnd = false;
 	private boolean isLoading = false;
+	private boolean isFavor = false;
 	
 	private Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
@@ -78,7 +93,6 @@ public class FilmDetailActivity extends Activity {
 				break;
 			case MSG_GET_COMMENT_NOUPDATE:
 				isReachEnd = true;
-				Toast.makeText(FilmDetailActivity.this, "已经到底啦", Toast.LENGTH_SHORT).show();
 				isLoading = false;
 				listView.showLoadingFooter(false);
 				break;
@@ -90,6 +104,12 @@ public class FilmDetailActivity extends Activity {
 				comments.add(0, addComment);
 				addComment = null;
 				adapter.notifyDataSetChanged();
+				break;
+			case MSG_CHANGE_FAVOR_SUCCESS:
+				adapter.notifyDataSetInvalidated();
+				break;
+			case MSG_CHANGE_FAVOR_FAILED:
+				Toast.makeText(FilmDetailActivity.this, "收藏状态更新失败", Toast.LENGTH_SHORT).show();
 				break;
 			}
 			
@@ -124,30 +144,100 @@ public class FilmDetailActivity extends Activity {
 			// TODO Auto-generated method stub
 			if(position == 0){
 				if(item_profile == null){
-					item_profile = View.inflate(FilmDetailActivity.this, R.layout.item_filmdetaillist_profile, null);
-					ImageView photo = (ImageView) item_profile.findViewById(R.id.iv_photo);
-					TextView name = (TextView) item_profile.findViewById(R.id.tv_name);
-					TextView type = (TextView) item_profile.findViewById(R.id.tv_type);
-					TextView player = (TextView) item_profile.findViewById(R.id.tv_player);
-					TextView time = (TextView) item_profile.findViewById(R.id.tv_time);
-					TextView timelong = (TextView) item_profile.findViewById(R.id.tv_timelong);
+					item_profile = View.inflate(FilmDetailActivity.this, R.layout.item_filmdetaillist_profile, null);	
+				}
+				ImageView photo = (ImageView) item_profile.findViewById(R.id.iv_photo);
+				TextView name = (TextView) item_profile.findViewById(R.id.tv_name);
+				TextView type = (TextView) item_profile.findViewById(R.id.tv_type);
+				TextView player = (TextView) item_profile.findViewById(R.id.tv_player);
+				TextView time = (TextView) item_profile.findViewById(R.id.tv_time);
+				TextView timelong = (TextView) item_profile.findViewById(R.id.tv_timelong);
+				Button favor = (Button) item_profile.findViewById(R.id.btn_favor);
+				favor.setOnClickListener(new OnClickListener() {
 					
-					name.setText(film.name);
-					type.setText(film.type);
-					player.setText(film.player);
-					time.setText(film.time);
-					timelong.setText(film.timelong);
-					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						new Thread(){
+							public void run() {
+								IFavorDao favorDao = new FavorImpl();
+								URLParam param = new URLParam(null);
+								Favor favor = new Favor();
+								if(isFavor){
+									param.addParam("cmd", URLProtocol.CMD_REMOVE_FAVOR);
+								}else{
+									param.addParam("cmd", URLProtocol.CMD_ADD_FAVOR);
+								}
+								param.addParam("uid", LifePreferences.getPreferences().getUID());
+								param.addParam("tid", film.id);
+								favor.tid = film.id;
+								if(FilmDetailActivity.this.type == FilmListFragment.FRAGMENTTYPE_RECENT){
+									favor.type = 1;
+									param.addParam("type", 1);
+								}else{
+									favor.type = 2;
+									param.addParam("type", 2);
+								}
+								String jsonStr = HttpConnection.httpGet(URLProtocol.ROOT, param);
+								//与服务器连接失败
+								if(jsonStr == null){
+									handler.sendEmptyMessage(MSG_CHANGE_FAVOR_FAILED);
+									return;
+								}
+								try {
+									JSONObject json = new JSONObject(jsonStr);
+									int code = json.getInt("code");
+									//有新增数据返回
+									if (code == 0) {
+										if(isFavor){
+											favorDao.removeFavor(favor);
+										}else{
+											favorDao.addFavor(favor);
+										}
+										isFavor = !isFavor;
+										handler.sendEmptyMessage(MSG_CHANGE_FAVOR_SUCCESS);
+										return;
+									}
+									handler.sendEmptyMessage(MSG_CHANGE_FAVOR_FAILED);
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							};
+						}.start();
+					}
+				});
+				name.setText(film.name);
+				type.setText(film.type);
+				player.setText(film.player);
+				time.setText(film.time);
+				timelong.setText(film.timelong);
+				if(isFavor){
+					favor.setText("已收藏");
+				}else{
+					favor.setText("未收藏");
+				}
+				if (film.icon == null) {
+					if(FileUtil.imageExist(film.image)){
+						String path = FileUtil.IMAGEDIR+ FileUtil.separator+ film.image + ".life";
+						film.icon = BitmapDrawable.createFromPath(path);
+						photo.setImageDrawable(film.icon);
+					}else{
+						LoadImageUtil.loadImage(photo, film.image);
+//						viewHolder.ivPhoto.setBackgroundResource(R.id.label);
+					}
+				} else {
+					photo.setImageDrawable(film.icon);;
 				}
 				return item_profile;
 			}else if(position == 1){
 				if(item_introduction == null){
 					item_introduction = View.inflate(FilmDetailActivity.this, R.layout.item_filmdetaillist_introduction, null);
-					TextView introduction = (TextView) item_introduction.findViewById(R.id.tv_introduction);
-					ImageView symbol = (ImageView) item_introduction.findViewById(R.id.iv_symbol);
-					
-					introduction.setText(film.desc);
 				}
+				TextView introduction = (TextView) item_introduction.findViewById(R.id.tv_introduction);
+				ImageView symbol = (ImageView) item_introduction.findViewById(R.id.iv_symbol);
+				
+				introduction.setText(film.desc);
 				return item_introduction;
 			}else{
 				ViewHolder viewHolder = null;
@@ -192,10 +282,14 @@ public class FilmDetailActivity extends Activity {
 			return;
 		}
 		IFilmDao filmdao = new FilmImpl();
+		IFavorDao favorDao = new FavorImpl();
+		String uid = LifePreferences.getPreferences().getUID();
 		if(type == FilmListFragment.FRAGMENTTYPE_RECENT){
 			film = filmdao.getFilm(id);
+			isFavor = favorDao.isFavor(uid, 1, film.id);
 		}else{
 			film = filmdao.getUpcomingFilm(id);
+			isFavor = favorDao.isFavor(uid, 2, film.id);
 		}
 		initView();
 		loadComment(-1);

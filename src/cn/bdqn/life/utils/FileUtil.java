@@ -9,7 +9,7 @@ import android.os.Environment;
 public class FileUtil {
 
 	public static String separator = File.separator;
-	public static String IMAGEDIR = getRootDir() + separator + "leisurlife"+separator+"image";
+	public static String IMAGEDIR = getRootDir() + separator + "Easylife"+separator+"image";
 	
 	/**获取SDCard根目录*/
 	public static File getRootDir(){

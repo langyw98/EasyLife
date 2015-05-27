@@ -1,5 +1,12 @@
 package cn.bdqn.life.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,9 +19,16 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import cn.bdqn.life.R;
 import cn.bdqn.life.customview.SlidingMenu;
+import cn.bdqn.life.dao.IFavorDao;
+import cn.bdqn.life.dao.impl.FavorImpl;
+import cn.bdqn.life.data.LifePreferences;
+import cn.bdqn.life.entity.Favor;
 import cn.bdqn.life.fragment.FavorFragment;
 import cn.bdqn.life.fragment.MainFragment;
 import cn.bdqn.life.fragment.RecommendFragment;
+import cn.bdqn.life.net.HttpConnection;
+import cn.bdqn.life.net.URLParam;
+import cn.bdqn.life.net.URLProtocol;
 
 public class MainActivity extends FragmentActivity{
 	
@@ -43,6 +57,46 @@ public class MainActivity extends FragmentActivity{
 		initEvent();
 		fgManager = getSupportFragmentManager();
 		selectTab(TAB_1);
+		syncDataFromServer();
+	}
+	private void syncDataFromServer(){
+		new Thread(){
+			public void run() {
+				String uid = LifePreferences.getPreferences().getUID();
+				IFavorDao favorDao = new FavorImpl();
+				URLParam param = new URLParam(null);
+				param.addParam("cmd", URLProtocol.CMD_FAVOR);
+				param.addParam("uid", uid);
+				String jsonStr = HttpConnection.httpGet(URLProtocol.ROOT, param);
+				//与服务器连接失败
+				if(jsonStr == null){
+					return;
+				}
+				try {
+					JSONObject json = new JSONObject(jsonStr);
+					int code = json.getInt("code");
+					//有新增数据返回
+					if (code == 0) {
+						JSONArray jrray = json.getJSONArray("list");
+						int len = jrray.length();
+						List<Favor> favors = new ArrayList<Favor>();
+						for (int i = 0; i < len; i++) {
+							JSONObject jo = jrray.getJSONObject(i);
+							Favor favor = new Favor();
+							favor.tid = jo.getInt("tid");
+							favor.type = jo.getInt("type");
+							favor.uid = uid;
+							favors.add(favor);
+						}
+						favorDao.updateFavorList(favors);
+						return;
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			};
+		}.start();
 	}
 	
 	private void selectTab(int pos){

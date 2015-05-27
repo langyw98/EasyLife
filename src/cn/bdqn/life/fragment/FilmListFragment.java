@@ -34,6 +34,7 @@ import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;
 import cn.bdqn.life.net.URLProtocol;
 import cn.bdqn.life.utils.FileUtil;
+import cn.bdqn.life.utils.LoadImageUtil;
 
 public class FilmListFragment extends Fragment implements OnScrollListener{
 	
@@ -100,12 +101,13 @@ public class FilmListFragment extends Fragment implements OnScrollListener{
 				if(FileUtil.imageExist(film.image)){
 					String path = FileUtil.IMAGEDIR+ FileUtil.separator+ film.image + ".life";
 					film.icon = BitmapDrawable.createFromPath(path);
-					viewHolder.ivPhoto.setBackground(film.icon);;
+					viewHolder.ivPhoto.setImageDrawable(film.icon);
 				}else{
+					LoadImageUtil.loadImage(viewHolder.ivPhoto, film.image);
 //					viewHolder.ivPhoto.setBackgroundResource(R.id.label);
 				}
 			} else {
-				viewHolder.ivPhoto.setBackground(film.icon);;
+				viewHolder.ivPhoto.setImageDrawable(film.icon);;
 			}
 			
 			if(fragmentType == FRAGMENTTYPE_RECENT){
@@ -136,7 +138,6 @@ public class FilmListFragment extends Fragment implements OnScrollListener{
 				Toast.makeText(hostActivity, "更新列表失败", Toast.LENGTH_LONG).show();
 				break;
 			case MSG_GET_FILMLIST_SUCCESS:
-				Toast.makeText(hostActivity, "更新列表成功", Toast.LENGTH_LONG).show();
 				break;
 			case MSG_GET_FILMLIST_NOUPDATE:
 				break;

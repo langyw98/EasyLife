@@ -97,4 +97,14 @@ public class URLProtocol {
 	
 	/**获取推荐列表*/
 	public static final int CMD_RECOMMEND = 901;
+	
+	/**获取收藏列表*/
+	public static final int CMD_FAVOR = 1001;
+	
+	/**添加收藏*/
+	public static final int CMD_ADD_FAVOR = 1002;
+	
+	/**移除收藏*/
+	public static final int CMD_REMOVE_FAVOR = 1003;
+	
 }

@@ -33,7 +33,6 @@ public class LoginActivity extends Activity {
 				Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_LONG).show();
 				break;
 			case MSG_LOGIN_SUCCESS:
-				Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_LONG).show();
 				//登陆成功，跳转到主界面
 				Intent intent = new Intent(LoginActivity.this, cn.bdqn.life.activity.MainActivity.class);
 				startActivity(intent);
@@ -102,7 +101,7 @@ public class LoginActivity extends Activity {
 						LifePreferences.getPreferences().setUID(uid);
 						LifePreferences.getPreferences().saveName(strAccount);
 						LifePreferences.getPreferences().savePW(strPassword);
-						LifePreferences.getPreferences().saveNickName((String)json.get("nickName"));
+						LifePreferences.getPreferences().saveNickName((String)json.get("nickname"));
 						
 						handler.sendEmptyMessage(MSG_LOGIN_SUCCESS);
 						return;

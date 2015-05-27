@@ -217,7 +217,6 @@ public class DetailMovie extends Activity implements OnItemClickListener,
 			map.put("comment", comment);
 			SaveDataUtils utils = new SaveDataUtils(this);
 			utils.saveData(map);
-			Toast.makeText(this, " ’≤ÿ≥…π¶", Toast.LENGTH_LONG).show();
 		}
 			break;
 		case R.id.share: {
