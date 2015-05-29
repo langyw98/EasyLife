@@ -43,130 +43,6 @@
            android:theme="@android:style/Theme.Holo.NoActionBar"></activity>
         <!-- new activity and service -->
         
-        <!-- old activity and service -->
-        <activity
-            android:name=".LoadingActivity" >
-        </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".RegActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".TabMainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".HomeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".TabMovieActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".WatchMovieActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity 
-            android:name=".QuestionActivity"
-            ></activity>
-        <activity
-            android:name=".WillMovieActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".DetailMovie"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".ShareActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".CommentActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".AboutActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".BaseActivity"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".ChangeCityActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".CollectionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".DetailEatActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".FAQActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".FeedbackActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".FindEatActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".MoreActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".RecommendActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".SeeShowActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".SeeDisplayActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".ConcertActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".MusicActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".PlayActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".PkoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".Delicaciesdetail"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".DisplayDetail"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".DetailShow"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity 
-            android:name=".HelpActivity"
-            ></activity>
-
-        <service android:name="cn.bdqn.life.net.ParseJasonDataService" >
-        </service>
-        <!-- old activity and service -->
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" >
@@ -175,17 +51,10 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <!-- 往SDCard写入数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 电话服务权限 -->
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <!-- 短信服务权限 -->
-    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
     </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
-    </uses-permission>
     <uses-permission android:name="android.permission.INTERNET" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
     </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
     </uses-permission>
