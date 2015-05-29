@@ -171,6 +171,7 @@ public class FilmDetailActivity extends Activity {
 								param.addParam("uid", LifePreferences.getPreferences().getUID());
 								param.addParam("tid", film.id);
 								favor.tid = film.id;
+								favor.uid = LifePreferences.getPreferences().getUID();
 								if(FilmDetailActivity.this.type == FilmListFragment.FRAGMENTTYPE_RECENT){
 									favor.type = 1;
 									param.addParam("type", 1);
