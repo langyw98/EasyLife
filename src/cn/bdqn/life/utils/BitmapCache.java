@@ -39,9 +39,7 @@ public class BitmapCache implements ImageCache {
 		String name = url.substring(url.lastIndexOf("=")+1);
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			File dir = new File(FileUtil.IMAGEDIR + "/");
-			if(!dir.exists()){
-				dir.mkdir();
-			}
+			mkdir(dir);
 			File f = new File(FileUtil.IMAGEDIR + "/" + name + ".life");
 			try {
 				f.createNewFile();
@@ -65,6 +63,16 @@ public class BitmapCache implements ImageCache {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	private void mkdir(File f){
+		File parentFile = new File(f.getParent());
+		if(!f.exists() && parentFile.exists()){
+			f.mkdir();
+		}else if(!f.exists() && !parentFile.exists()){
+			mkdir(parentFile);
+			mkdir(f);
 		}
 	}
 }
