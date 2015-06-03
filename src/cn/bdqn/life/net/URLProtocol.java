@@ -10,7 +10,7 @@ public class URLProtocol {
 	public static String IP = null;
 	static{
 //		IP = getAllHostIPs("liuy-PC.jv.jb-aptech.com.cn");
-		IP = "192.168.1.47";
+		IP = "192.168.9.184";
 	};
 	public static final String ROOT = "http://" + IP + ":8080/leisurelife/dealcmd";
 	

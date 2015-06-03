@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -26,6 +27,7 @@ import cn.bdqn.life.entity.Favor;
 import cn.bdqn.life.fragment.FavorFragment;
 import cn.bdqn.life.fragment.MainFragment;
 import cn.bdqn.life.fragment.RecommendFragment;
+import cn.bdqn.life.fragment.UserInfoFragment;
 import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;
 import cn.bdqn.life.net.URLProtocol;
@@ -45,6 +47,7 @@ public class MainActivity extends FragmentActivity{
 	private Fragment mainFragment;
 	private Fragment recommendFragment;
 	private Fragment favorFragment;
+	private UserInfoFragment userInfoFragment;
 	
 	private SlidingMenu slidingMenu;
 	
@@ -218,5 +221,13 @@ public class MainActivity extends FragmentActivity{
 //		return super.dispatchTouchEvent(ev);
 //	}
 //	
+	public void setUserInfoFragment(UserInfoFragment userInfoFragment){
+		this.userInfoFragment = userInfoFragment;
+	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		userInfoFragment.onActivityResult(requestCode, resultCode, data);
+	}
 }

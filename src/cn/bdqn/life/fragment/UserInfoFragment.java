@@ -10,11 +10,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import cn.bdqn.life.R;
+import cn.bdqn.life.activity.MainActivity;
 
 public class UserInfoFragment extends Fragment {
 	public static final int REQUEST_CODE_FETCH_ICON = 1;
 	
-	private Activity hostActivity;
+	private MainActivity hostActivity;
 	private ImageView ivIcon;
 	
 	@Override
@@ -33,7 +34,8 @@ public class UserInfoFragment extends Fragment {
 	
 	private void initView() {
 		// TODO Auto-generated method stub
-		hostActivity = getActivity();
+		hostActivity = (MainActivity)getActivity();
+		hostActivity.setUserInfoFragment(this);
 		ivIcon = (ImageView) getView().findViewById(R.id.iv_icon);
 		ivIcon.setOnClickListener(new OnClickListener() {
 			
