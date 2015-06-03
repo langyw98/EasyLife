@@ -1,20 +1,13 @@
 package cn.bdqn.life.dao.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-import cn.bdqn.life.MyApplication;
 import cn.bdqn.life.dao.ICommentDao;
-import cn.bdqn.life.database.LifeDatabaseOpenHelper;
 import cn.bdqn.life.entity.Comment;
 import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;

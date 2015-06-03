@@ -12,9 +12,7 @@ import cn.bdqn.life.database.LifeDatabaseOpenHelper;
 import cn.bdqn.life.entity.Exhibition;
 import cn.bdqn.life.entity.Favor;
 import cn.bdqn.life.entity.FilmFavor;
-import cn.bdqn.life.entity.FilmRecommend;
 import cn.bdqn.life.entity.Food;
-import cn.bdqn.life.entity.Recommend;
 import cn.bdqn.life.entity.Show;
 
 public class FavorImpl implements IFavorDao {

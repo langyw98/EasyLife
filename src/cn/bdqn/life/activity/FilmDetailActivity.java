@@ -3,7 +3,6 @@ package cn.bdqn.life.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,7 +33,6 @@ import cn.bdqn.life.dao.IFilmDao;
 import cn.bdqn.life.dao.impl.CommentImpl;
 import cn.bdqn.life.dao.impl.FavorImpl;
 import cn.bdqn.life.dao.impl.FilmImpl;
-import cn.bdqn.life.data.LifePreferences;
 import cn.bdqn.life.entity.Comment;
 import cn.bdqn.life.entity.Favor;
 import cn.bdqn.life.entity.Film;
@@ -43,6 +41,7 @@ import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;
 import cn.bdqn.life.net.URLProtocol;
 import cn.bdqn.life.utils.FileUtil;
+import cn.bdqn.life.utils.LifePreferences;
 import cn.bdqn.life.utils.LoadImageUtil;
 
 public class FilmDetailActivity extends Activity {

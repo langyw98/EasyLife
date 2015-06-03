@@ -13,8 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -22,7 +20,6 @@ import cn.bdqn.life.R;
 import cn.bdqn.life.customview.SlidingMenu;
 import cn.bdqn.life.dao.IFavorDao;
 import cn.bdqn.life.dao.impl.FavorImpl;
-import cn.bdqn.life.data.LifePreferences;
 import cn.bdqn.life.entity.Favor;
 import cn.bdqn.life.fragment.FavorFragment;
 import cn.bdqn.life.fragment.MainFragment;
@@ -31,6 +28,7 @@ import cn.bdqn.life.fragment.UserInfoFragment;
 import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;
 import cn.bdqn.life.net.URLProtocol;
+import cn.bdqn.life.utils.LifePreferences;
 
 public class MainActivity extends FragmentActivity{
 	

@@ -12,7 +12,9 @@ public class URLProtocol {
 //		IP = getAllHostIPs("liuy-PC.jv.jb-aptech.com.cn");
 		IP = "192.168.9.184";
 	};
-	public static final String ROOT = "http://" + IP + ":8080/leisurelife/dealcmd";
+	public static final String HOST = "http://" + IP + ":8080/leisurelife";
+	public static final String ROOT = HOST + "/dealcmd";
+	
 	
 	public static String getAllHostIPs(String hostName){
         String[] ips=null;
@@ -41,6 +43,15 @@ public class URLProtocol {
 	
 	/**发布评论*/
 	public static final int CMD_SEND_COMMENT = 3;
+	
+	/**获取图片*/
+	public static final int CMD_GET_IMAGE = 4;
+	
+	/**上传用户头像*/
+	public static final int CMD_UPLOAD_HEADICON =5;
+	
+	/**获取用户头像*/
+	public static final int CMD_GET_HEADICON = 6;
 	
 	/**获取电影列表*/
 	public static final int CMD_FILM = 101;

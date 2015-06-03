@@ -7,15 +7,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import cn.bdqn.life.R;
-import cn.bdqn.life.data.LifePreferences;
 import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;
 import cn.bdqn.life.net.URLProtocol;
+import cn.bdqn.life.utils.LifePreferences;
 
 public class LoginActivity extends Activity {
 	private static final int MSG_CONNECT_FAILED = 0;

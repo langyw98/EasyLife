@@ -1,17 +1,22 @@
 package cn.bdqn.life.net;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import cn.bdqn.life.utils.FileUtil;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import android.util.Log;
 
 public class HttpConnection {
 
@@ -58,47 +63,50 @@ public class HttpConnection {
 		return data;
 	}
 	
-	/**获取网路图片*/
-	public static Drawable getNetimage(String image){
-		String urlStr = URLProtocol.ROOT;
-		URLParam param = new URLParam(null);
-		param.addParam("cmd", 4);
-		param.addParam("image", image);
-		urlStr += param.getQueryStr();
-		Bitmap bm = BitmapFactory.decodeStream(getHttpStream(urlStr,image));
-		if(bm != null){
-			return new BitmapDrawable(bm);
-		}
-		return null;
-	}
-	
-	/**获取网路图片*/
-	public static InputStream getHttpStream(String strUrl,String image){
-		HttpURLConnection conn = null;
-		try{
-			URL url = new URL(strUrl);
-			conn = (HttpURLConnection) url.openConnection();
-			conn.setConnectTimeout(5*1000);
-			conn.setRequestMethod("GET");
-			if(conn.getResponseCode() != 200){
-				throw new RuntimeException("请求uri失败");
-			}
-			InputStream inStream = conn.getInputStream();
-			byte[] data = readData(inStream);
-			FileUtil.saveFile(image, data);//获取图片后保存图片到SDCard
-			
-			inStream.close();
-		
-			return new ByteArrayInputStream(data);
-		
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			if(conn != null){
-				conn.disconnect();
-			}
-		}
-		return null;
-		
+	/**
+	 * 上传图片
+	 * 
+	 * @param url
+	 *            上传地址
+	 * @param filepath
+	 *            图片路径
+	 * @return
+	 */
+	public static String uploadImage(String url, String filepath) {
+	    File file = new File(filepath);
+
+	    if (!file.exists()) {
+	        Log.i("leslie", "file not exists");
+	        return null;
+	    }
+
+	    HttpClient client = new DefaultHttpClient();
+	    HttpPost post = new HttpPost(url);
+
+	    FileBody fileBody = new FileBody(file, "image/png");
+	    MultipartEntity entity = new MultipartEntity();
+	    // image 是服务端读取文件的 key
+	    entity.addPart("image", fileBody);
+
+	    post.setEntity(entity);
+
+	    try {
+	        HttpResponse response = client.execute(post);
+	        int statusCode = response.getStatusLine().getStatusCode();
+	        String result = EntityUtils.toString(response.getEntity(), "utf-8");
+
+	        if (statusCode == 201) {
+	            // upload success
+	            // do something
+	        }
+
+	        return result;
+	    } catch (ClientProtocolException e) {
+	        e.printStackTrace();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+
+	    return null;
 	}
 }

@@ -27,17 +27,16 @@ import cn.bdqn.life.R;
 import cn.bdqn.life.activity.FilmDetailActivity;
 import cn.bdqn.life.dao.IFavorDao;
 import cn.bdqn.life.dao.impl.FavorImpl;
-import cn.bdqn.life.data.LifePreferences;
 import cn.bdqn.life.entity.Exhibition;
 import cn.bdqn.life.entity.Favor;
 import cn.bdqn.life.entity.FilmFavor;
-import cn.bdqn.life.entity.FilmRecommend;
 import cn.bdqn.life.entity.Food;
 import cn.bdqn.life.entity.Show;
 import cn.bdqn.life.net.HttpConnection;
 import cn.bdqn.life.net.URLParam;
 import cn.bdqn.life.net.URLProtocol;
 import cn.bdqn.life.utils.FileUtil;
+import cn.bdqn.life.utils.LifePreferences;
 import cn.bdqn.life.utils.LoadImageUtil;
 
 public class FavorFragment extends Fragment {

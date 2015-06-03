@@ -1,10 +1,10 @@
-package cn.bdqn.life.data;
+package cn.bdqn.life.utils;
 
-import cn.bdqn.life.MyApplication;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Base64;
+import cn.bdqn.life.MyApplication;
 
 public class LifePreferences {
 

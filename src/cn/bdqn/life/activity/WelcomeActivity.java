@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import cn.bdqn.life.R;
-import cn.bdqn.life.data.LifePreferences;
+import cn.bdqn.life.utils.LifePreferences;
 
 public class WelcomeActivity extends Activity {
 	private LifePreferences lifeInstance;
