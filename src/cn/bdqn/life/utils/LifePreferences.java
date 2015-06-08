@@ -154,4 +154,11 @@ public class LifePreferences {
 		init();
 		return lifePreferences.getBoolean(REMBER_PW, true);
 	}
+	/**清除所有信息*/
+	public void clearData(){
+		init();
+		Editor editor = lifePreferences.edit();
+		editor.clear();
+		editor.commit();
+	}
 }

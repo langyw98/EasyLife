@@ -10,7 +10,7 @@ public class URLProtocol {
 	public static String IP = null;
 	static{
 //		IP = getAllHostIPs("liuy-PC.jv.jb-aptech.com.cn");
-		IP = "192.168.9.184";
+		IP = "192.168.9.42";
 	};
 	public static final String HOST = "http://" + IP + ":8080/leisurelife";
 	public static final String ROOT = HOST + "/dealcmd";
@@ -52,6 +52,12 @@ public class URLProtocol {
 	
 	/**获取用户头像*/
 	public static final int CMD_GET_HEADICON = 6;
+	
+	/**修改密码*/
+	public static final int CMD_CHANGE_PWD = 7;
+	
+	/**修改昵称*/
+	public static final int CMD_CHANGE_NICKNAME = 8;
 	
 	/**获取电影列表*/
 	public static final int CMD_FILM = 101;
